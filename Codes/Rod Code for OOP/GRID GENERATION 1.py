@@ -1,4 +1,4 @@
-from consta import*
+from consta import *
 import numpy as np
 from tabulate import tabulate
 
