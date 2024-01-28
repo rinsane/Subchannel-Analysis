@@ -44,13 +44,13 @@ def main():
         for II in range(NODE[i].NCHANL):
             for JJ in range(NODE[i].NCHANL):
                 if II == JJ:
-                    NODE[i].XMI[II, JJ] = NODE[i].THETA * NODE[i].XM[II, JJ] + 1
+                    NODE[i].XMI[II][JJ] = NODE[i].THETA * NODE[i].XM[II, JJ] + 1
                 else:
-                    NODE[i].XMI[II, JJ] = NODE[i].THETA * NODE[i].XM[II, JJ]
+                    NODE[i].XMI[II][JJ] = NODE[i].THETA * NODE[i].XM[II, JJ]
 
         for I in range(NODE[i].NCHANL):
             for J in range(NODE[i].NCHANL):
-                NODE[i].XM0[I, J] = NODE[i].XMI[I, J] - NODE[i].XM[I, J]
+                NODE[i].XM0[I, J] = NODE[i].XMI[I][J] - NODE[i].XM[I, J]
 
         for I in range(NODE[i].NCHANL):
             SUM = 0
@@ -60,7 +60,7 @@ def main():
             NODE[i].PM0[I] = SUM
             NODE[i].PB[I] = NODE[i].B[I] + NODE[i].PM0[I]
 
-        NODE[i].P1 = NODE[i].gauss(NODE[i].XMI, NODE[i].P1, NODE[i].PB, NODE[i].NCHANL)
+        NODE[i].gauss()
         NODE[i].DCROSS()
 
         for K in range(NODE[i].NK):
@@ -97,9 +97,9 @@ def main():
 
         NODE[i].HM()
 
-        print(f"Pressure {i}: {NODE[i].P1}")
-        print(f"Enthalpy {i}: {NODE[i].H1}")
-        print(f"WIJ{i}      : {NODE[i].WIJ1}")
+        print(f"Pressure {i}: {NODE[i].P1}\n")
+        print(f"Enthalpy {i}: {NODE[i].H1}\n")
+        print(f"WIJ{i}      : {NODE[i].WIJ1}\n")
         print(f"MassFlow {i}: {NODE[i].F1}")
 
 if __name__ == '__main__':
