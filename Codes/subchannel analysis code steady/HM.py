@@ -5,9 +5,6 @@ from inputs import*
 from SKI import* 
 
 
-
-
-
 def HM():
     print("STARTING OF SUBROUTINE HMW")
     for K in range(0, NK):
