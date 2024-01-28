@@ -62,7 +62,7 @@ class variables:
       self.JC      = [2, 3, 5, 4, 5, 6, 8, 10, 7, 8, 9, 10, 11, 12, 13, 14, 12, 13, 14]
             
       self.P0      = np.zeros(variables.NK)
-      self.P1      = np.zeros(variables.NK)
+      self.P1      = np.zeros(variables.NK, dtype=np.float64)
       self.P11     = np.zeros(variables.NK)
       self.PB      = np.zeros(variables.NK)
       self.PIN     = 12262500
@@ -98,7 +98,7 @@ class variables:
       self.XHST    = np.zeros((variables.NK, variables.NK))
       self.XM      = np.zeros((variables.NK, variables.NK))
       self.XM0     = np.zeros((variables.NK, variables.NK))
-      self.XMI     = np.zeros((variables.NK, variables.NK))
+      self.XMI     = np.zeros((variables.NK, variables.NK), dtype=np.float64)
       self.XMLT    = np.zeros((variables.NK, variables.NK))
       self.XUST0   = [[0.0] * variables.NK for _ in range(variables.NK)]
       self.XUST1   = [[0.0] * variables.NK for _ in range(variables.NK)]

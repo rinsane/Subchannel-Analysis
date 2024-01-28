@@ -10,14 +10,14 @@ def main():
             for I in range(NODE[i].NCHANL):
                 NODE[i].F1[I] = NODE[i].F0[I]
                 NODE[i].P0[I] = NODE[i].PIN
-            print("FOR NODE ZERO (init)")
+            print("FOR NODE ZERO (init)\n\n")
 
             for K in range(NODE[i].NK):
                 NODE[i].WIJ0[K] = NODE[i].WIJIN
                 NODE[i].WIJ1[K] = NODE[i].WIJIN
         
         else:
-            print(f"FOR NODE {i}: ")
+            print(f"\n\nFOR NODE {i}: \n\n")
             NODE[i].P0 = NODE[i-1].P1
 
             NODE[i].F0 = NODE[i-1].F1
@@ -31,7 +31,7 @@ def main():
         NODE[i].SKI()
         NODE[i].XD()
         NODE[i].XB()
-        NODE[i].YMULT(
+        NODE[i].XM = NODE[i].YMULT(
             NODE[i].XMLT, NODE[i].S, NODE[i].XM, NODE[i].NCHANL, NODE[i].NK, NODE[i].NCHANL
         )
 
@@ -60,7 +60,7 @@ def main():
             NODE[i].PM0[I] = SUM
             NODE[i].PB[I] = NODE[i].B[I] + NODE[i].PM0[I]
 
-        NODE[i].gauss(NODE[i].XMI, NODE[i].P1, NODE[i].PB, NODE[i].NCHANL)
+        NODE[i].P1 = NODE[i].gauss(NODE[i].XMI, NODE[i].P1, NODE[i].PB, NODE[i].NCHANL)
         NODE[i].DCROSS()
 
         for K in range(NODE[i].NK):

@@ -89,8 +89,8 @@ class sub_routines(variables):
 
                 XG[I] = AP / AG[I][I]
 
-            ERR = [abs(XG[i] - XG1[i]) / abs(XG[i]) for i in range(IG)]
-            ERRMAX = max(ERR)
+            self.ERR = [abs(XG[i] - XG1[i]) / abs(XG[i]) for i in range(IG)]
+            ERRMAX = max(self.ERR)
 
             if ERRMAX <= 1e-08:
                 break
@@ -283,7 +283,7 @@ class sub_routines(variables):
                 # print(AVRE)
                 BETA = (
                     0.0018
-                    * (AVRE ** (-0.1))
+                    * (1/(abs(AVRE) ** (0.1)))
                     * (AHDIA / self.GAP[K])
                     * ((self.GAP[K] / self.RDIA) ** (1 - 0.4))
                 )  ### correlation for beta taken from finding
@@ -361,9 +361,7 @@ class sub_routines(variables):
             self.RE[I] = (
                 self.F0[I] * self.HDIA[I] / (self.A[I] * self.VISC)
             )  ## calculation of reynold no
-            FACF[I] = 0.05052 * self.RE[I] ** (
-                -0.05719
-            )  ## calculation of friction factor
+            FACF[I] = 0.05052 * (1/(abs(self.RE[I]) ** 0.05719))  ## calculation of friction factor
             X4 = self.XY[I]
             X1 = (self.F0[I] / self.A[I]) ** 2  ## ratio of mass flow rate to area
             X2 = (
