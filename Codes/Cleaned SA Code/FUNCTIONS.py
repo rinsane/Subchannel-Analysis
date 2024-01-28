@@ -50,13 +50,13 @@ class sub_routines(variables):
         # fpr computation of diversion cross flow raTE AND AXIAL MASS FLOW F1
         print("STARTING OF DCROSS")
 
-        for K in range(0, self.NK):
+        for K in range(self.NK):
             SP1 = self.USTAR0[K] * self.WIJ0[K] / self.DELX
             SP2 = self.SLP * (1 - self.THETA) * self.CIJ0[K] * self.WIJ0[K]
             SUM3 = 0
             SUM4 = 0
 
-            for I in range(0, self.NCHANL):
+            for I in range(self.NCHANL):
                 SP3 = self.S[K][I] * self.P1[I]
                 SP4 = self.S[K][I] * self.P0[I]
                 SUM3 += SP3
@@ -67,10 +67,6 @@ class sub_routines(variables):
 
             self.WIJ1[K] = (SP1 - SP2 + SP3 + SP4) / self.D[K]
 
-        # Print the results
-        '''print("WIJ1=")
-        for K in range(0, self.NK):
-            print(f"{self.WIJ1[K]:13.6e}", end=" ")'''
         print("END OF DCROSS")
 
     def gauss(self):
@@ -106,29 +102,31 @@ class sub_routines(variables):
     def HM(self):
         # SKI called before that
         print("STARTING OF HMW")
-        for K in range(0, self.NK):
+        for K in range(self.NK):
             I = self.IC[K] - 1
             J = self.JC[K] - 1
             self.HSTAR[K] = 0.5 * (self.H0[I] + self.H0[J])
             self.DELH[K] = self.H0[I] - self.H0[J]
 
-        for II in range(0, self.NK):
-            for JJ in range(0, self.NK):
+        for II in range(self.NK):
+            for JJ in range(self.NK):
                 if II == JJ:
-                    self.XDELH[II, JJ] = self.DELH[II]
-                    self.XHS[II, JJ] = self.HSTAR[II]
+                    self.XDELH[II][JJ] = self.DELH[II]
+                    self.XHS[II][JJ] = self.HSTAR[II]
                 else:
                     self.XDELH[II, JJ] = 0
                     self.XHS[II, JJ] = 0
 
-        for II in range(0, self.NCHANL):
-            for JJ in range(0, self.NCHANL):
+        for II in range(self.NCHANL):
+            for JJ in range(self.NCHANL):
                 if II == JJ:
                     self.XH[II, JJ] = self.H0[I]
                 else:
                     self.XH[II, JJ] = 0
 
-        self.S5 = self.XMULT(self.ST, self.XHS, self.S5, self.NCHANL, self.NK, self.NK)
+        self.S5 = self.XMULT(
+            self.ST, self.XHS, self.S5, self.NCHANL, self.NK, self.NK
+        )
         self.SD = self.XMULT(
             self.ST, self.XDELH, self.SD, self.NCHANL, self.NK, self.NK
         )
@@ -136,19 +134,14 @@ class sub_routines(variables):
             self.XH, self.ST, self.XHST, self.NCHANL, self.NCHANL, self.NK
         )
 
-        for I in range(0, self.NCHANL):
+        for I in range(self.NCHANL):
             self.Q[I] = self.HF[I] * self.HPERI[I]
-            # print(Q[I])
-        for I in range(0, self.NCHANL):
             self.C1[I] = self.Q[I] * self.DELX / self.F1[I]
-            #print(self.C1[I], end = ' ')
-        #print()
-
-
-        for II in range(0, self.NCHANL):
+            
+        for II in range(self.NCHANL):
             SUM3 = 0
             SUM4 = 0
-            for KK in range(0, self.NK):
+            for KK in range(self.NK):
                 S3 = self.XHST[II, KK] * self.WIJ1[KK]
                 SS3 = self.S5[II, KK] * self.WIJ1[KK]
                 S3 = S3 - SS3
@@ -211,27 +204,27 @@ class sub_routines(variables):
         for K in range(self.NK):
             I = self.IC[K] - 1
             J = self.JC[K] - 1
-            if self.F1[J]:
+            if self.WIJ1[J] < 0:
                 self.USTAR1[K] = self.F1[J] / (self.A[J] * self.RHO)
-            elif self.F1[I] and self.F1[J]:
+            elif self.WIJ1[K] == 0:
                 self.USTAR1[K] = 0.5 * (
                     (self.F1[I] / (self.A[I] * self.RHO))
                     + (self.F1[J] / (self.A[J] * self.RHO))
                 )
-            elif self.F1[I]:
+            else:
                 self.USTAR1[K] = self.F1[I] / (self.A[I] * self.RHO)
 
         for K in range(self.NK):
             I = self.IC[K] - 1
             J = self.JC[K] - 1
-            if self.F0[J]:
+            if self.WIJ0[J] < 0:
                 self.USTAR0[K] = self.F0[J] / (self.A[J] * self.RHO)
-            elif self.F0[I] and self.F0[J]:
+            elif self.WIJ0[K] == 0:
                 self.USTAR0[K] = 0.5 * (
                     (self.F0[I] / (self.A[I] * self.RHO))
                     + (self.F0[J] / (self.A[J] * self.RHO))
                 )
-            elif self.F0[I]:
+            else:
                 self.USTAR0[K] = self.F0[I] / (self.A[I] * self.RHO)
 
         for KK in range(self.NK):
@@ -242,10 +235,6 @@ class sub_routines(variables):
                 else:
                     self.XUST0[KK][II] = 0.0
                     self.XUST1[KK][II] = 0.0
-
-        # Print USTAR0 and USTAR1
-        '''for K in range(self.NK):
-            print(f"USTAR0[{K}] = {self.USTAR0[K]}, USTAR1[{K}] = {self.USTAR1[K]}")'''
         print("END OF STAR")
 
     def wprim(self):
