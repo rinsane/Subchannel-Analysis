@@ -16,7 +16,7 @@ def HM():
         HSTAR[K] = 0.5 * (H0[I] + H0[J])
         DELH[K] = H0[I] - H0[J]
 
-
+    
     for II in range(0, NK):
         for JJ in range(0, NK):
             if II == JJ:
@@ -26,7 +26,7 @@ def HM():
                 XDELH[II, JJ] = 0
                 XHS[II, JJ] = 0
 
-    print(H0)
+    
 
     for II in range(0, NCHANL):
         for JJ in range(0, NCHANL):
@@ -70,4 +70,5 @@ def HM():
     print("END OF SUB-HMW")
     return (H1)
 
-# HM()
+
+HM()

@@ -104,12 +104,12 @@ PIN=12262500
 print(PIN)
 if X==0:
     for I in range(NCHANL):
-       F1[I]=F0[I]                                # type: ignore ##############   WHY THIS BC IS NOT UPDATING
+       F1[I]=F0[I]                                ##############   WHY THIS BC IS NOT UPDATING
        P0[I]=PIN
     
     for K in range(NK):
-       WIJ0[K]=WIJIN # type: ignore
-       WIJ1[K]=WIJIN # type: ignore
+       WIJ0[K]=WIJIN
+       WIJ1[K]=WIJIN
 
 
 DELX=AXLN/(NNODE-1)

@@ -21,7 +21,7 @@ def xxa():
     wprim()
 
     for I in range(0, NCHANL):
-        RE[I] = F0[I] * HDIA[I] / (A[I] * VISC)                            # type: ignore ## calculation of reynold no
+        RE[I] = F0[I] * HDIA[I] / (A[I] * VISC)                            ## calculation of reynold no
         FACF[I] = 0.05052 * RE[I] ** (-0.05719)                            ## calculation of friction factor
         X4 = XY[I]
         X1 = (F0[I] / A[I]) ** 2                                             ## ratio of mass flow rate to area
