@@ -72,35 +72,33 @@ class sub_routines(variables):
             print(f"{self.WIJ1[K]:13.6e}", end=" ")'''
         print("END OF DCROSS")
 
-    def gauss(self, AG, XG, YG, IG):
-
+    def gauss(self):
         print("calling GAUSS")
-        XG1 = XG.copy()  # Initialize XG1 with the initial values of XG
-        ITER = 1
-
+        XG1 = self.P1.copy()  # Initialize self.P11 with the initial values of self.P1
+        
+        print("P1: ")
+        print(self.P1)
+        
         while True:
-            for I in range(IG):
-                AP = YG[I]
-                for J in range(IG):
+            for I in range(self.NCHANL):
+                AP = self.PB[I]
+                for J in range(self.NCHANL):
                     if I == J:
                         continue
                     else:
-                        AP -= AG[I][J] * XG[J]
+                        AP -= self.XMI[I][J] * self.P1[J]
 
-                XG[I] = AP / AG[I][I]
-
-            self.ERR = [abs(XG[i] - XG1[i]) / abs(XG[i]) for i in range(IG)]
+                self.P1[I] = AP / self.XMI[I][I]
+                
+            self.ERR = [abs(self.P1[i] - XG1[i]) / abs(self.P1[i]) for i in range(self.NCHANL)]
             ERRMAX = max(self.ERR)
 
             if ERRMAX <= 1e-08:
                 break
 
-            XG1 = XG.copy()
-            ITER += 1
-        # print(f'ITERATION={ITER}')
-        # print("XG=", XG)
+            XG1 = self.P1.copy()
+
         print("GAUSS over")
-        return XG
 
     def HM(self):
         # SKI called before that
