@@ -151,31 +151,22 @@ class sub_routines(variables):
                 self.C2[II] = SUM4 * self.DELX / self.F1[II]
                 self.C3[II] = SUM3 * self.DELX / self.F1[II]
 
-        for I in range(0, self.NCHANL):
+        for I in range(self.NCHANL):
             self.H1[I] = self.H0[I] + self.C1[I] - self.C2[I] + self.C3[I]
-
-        # Print the results
-        '''for I in range(0, self.NCHANL):
-            print(f"H1[{I}] = {self.H1[I]}")'''
 
         print("END OF HMW")
 
     def MASFLO(self):
         # Called ski before using it
         print("STARTING OF MASFLO")
-        for I in range(0, self.NCHANL):
+        for I in range(self.NCHANL):
             SUM = 0
-            for K in range(0, self.NK):
+            for K in range(self.NK):
                 SW = self.ST[I][K] * self.WIJ1[K]
                 SUM += SW
-            self.F1[I] = self.F0[I] - (self.DELX * SUM)
+                self.F1[I] = self.F0[I] - (self.DELX * SUM)
 
-        # Print the results
-        '''print("AXIAL MASS FLOW(F1)=")
-        for I in range(0, self.NCHANL):
-            print(f"{self.F1[I]:13.6e}", end=" ")
-        print("\n***** TOTAL MASS FLOW= ", sum(self.F1))
-        print("\n***** TOTAL MASS FLOW initial= ", sum(self.F0))'''
+        print("FTOTAL: ", sum(self.F1))
         print("END OF MASFLO")
 
     def SKI(self):
@@ -244,80 +235,42 @@ class sub_routines(variables):
         # wpr= beta*gap*avg mass flux
 
         print("STARTING OF WPRIM")
-
+        AVRE = [0] * self.NK
+        BETA = [0] * self.NK
+        AHDIA = [0] * self.NK
+        
         for K in range(self.NK):
             I = self.IC[K] - 1
             J = self.JC[K] - 1
 
-            if 0 <= I < len(self.IC) and 0 <= J < len(self.JC):
+            AHDIA[K] = 0.5 * (
+                self.HDIA[I] + self.HDIA[J]
+            )  ### avg hdia of adjacent subchannel
+            AVRE[K] = (
+                0.5
+                * ((self.F1[I] / self.A[I]) + (self.F1[J] / self.A[J]))
+                * AHDIA[K]
+                / self.VISC
+            )  ## avg re of adjacent subchannel
+            BETA[K] = (
+                0.0018
+                * (abs(AVRE[K]) ** (-0.1))
+                * (AHDIA[K] / self.GAP[K])
+                * ((self.GAP[K] / self.RDIA) ** (1 - 0.4))
+            )  ### correlation for beta taken from finding
 
-                AHDIA = 0.5 * (
-                    self.HDIA[I] + self.HDIA[J]
-                )  ### avg hdia of adjacent subchannel
-                AVRE = (
-                    0.5
-                    * ((self.F1[I] / self.A[I]) + (self.F1[J] / self.A[J]))
-                    * AHDIA
-                    / self.VISC
-                )  ## avg re of adjacent subchannel
-                # print(AVRE)
-                BETA = (
-                    0.0018
-                    * (1/(abs(AVRE) ** (0.1)))
-                    * (AHDIA / self.GAP[K])
-                    * ((self.GAP[K] / self.RDIA) ** (1 - 0.4))
-                )  ### correlation for beta taken from finding
 
-                '''print(
-                    "AVRE:",
-                    AVRE,
-                    "AHDIA:",
-                    AHDIA,
-                    "GAP[K]:",
-                    self.GAP[K],
-                    "RDIA:",
-                    self.RDIA,
-                )'''
-
-                self.WPR[K] = (
-                    BETA * self.GAP[K] * AVRE * self.VISC / AHDIA
-                )  ## wpr is turbulent cross flow
-            else:
-                print(f"Invalid indices for AHDIA: K={K}, I={I}, J={J}")
-
-        for K in range(self.NK):
-            I = self.IC[K] - 1
-            J = self.JC[K] - 1
-            if (
-                0 <= I < len(self.IC)
-                and 0 <= J < len(self.JC)
-                and 0 <= K < len(self.XZ)
-            ):
-                # print(len(XZ))
-                self.XZ[K] = (
-                    ((self.F1[I] / self.A[I]) - (self.F1[J] / self.A[J]))
-                    * self.WPR[K]
-                    / self.RHO
-                )
-                # print(XZ[K])
-            else:
-                print(f"Invalid indices for XZ: K={K}, I={I}, J={J}")
+            self.WPR[K] = (
+                BETA[K] * self.GAP[K] * AVRE[K] * self.VISC / AHDIA[K]
+            )  ## wpr is turbulent cross flow
+            
+            self.XZ[K] = (self.F1[I]/self.A[I] - self.F1[J]/self.A[J]) * self.WPR[K] / self.RHO
 
         for I in range(self.NCHANL):
             SUM = 0.0
             for K in range(self.NK):
-                if (
-                    0 <= I < len(self.ST)
-                    and 0 <= K < len(self.ST[I])
-                    and 0 <= K < len(self.XZ)
-                ):
-                    SUM += self.ST[I][K] * self.XZ[K]
-                    # print(ST[I][K])################ PROBLEM IS HERE
-            if 0 <= I < len(self.XY) and 0 <= I < len(self.A):
-                self.XY[I] = self.FT * SUM / self.A[I]
-                #print(f"XY[{I}] = {self.XY[I]}")
-            else:
-                print(f"Invalid index for XY: I={I}")
+                SUM += self.ST[I][K] * self.XZ[K]
+            self.XY[I] = self.FT * SUM / self.A[I]
 
         print("END OF WPRIM")
 
@@ -337,11 +290,11 @@ class sub_routines(variables):
         # Call to WPRIM (assuming it's another subroutine)
         self.wprim()
 
-        for I in range(0, self.NCHANL):
+        for I in range(self.NCHANL):
             self.RE[I] = (
                 self.F0[I] * self.HDIA[I] / (self.A[I] * self.VISC)
             )  ## calculation of reynold no
-            FACF[I] = 0.05052 * (1/(abs(self.RE[I]) ** 0.05719))  ## calculation of friction factor
+            FACF[I] = 0.05052 * (abs(self.RE[I]) ** (-0.05719))  ## calculation of friction factor
             X4 = self.XY[I]
             X1 = (self.F0[I] / self.A[I]) ** 2  ## ratio of mass flow rate to area
             X2 = (
@@ -350,12 +303,7 @@ class sub_routines(variables):
             X3 = (
                 self.GC * self.RHO * math.cos(self.ALPHA * math.pi / 180)
             )  ## role of gravity
-            self.XA[I] = -X1 * X2 - X3 - X4
-
-        # Print statements for debugging (commented out)
-        # print('RE FACF XA')
-        '''for I in range(0, self.NCHANL):
-            print(self.RE[I], FACF[I], self.XA[I])'''
+            self.XA[I] = -(X1 * X2) - X3 - X4
 
         print("END OF XXA")
 
@@ -364,74 +312,62 @@ class sub_routines(variables):
         print("STARTING OF XD")
         self.star()
 
-        for K in range(0, self.NK):
-            if K < len(self.IC) and K < len(self.JC):
-                I = self.IC[K] - 1
-                J = self.JC[K] - 1
-                self.CIJ0[K] = (
-                    0.5 * self.FACK * abs(self.WIJ0[K]) / (self.RHO * self.GAP[K] ** 2)
-                )
-                self.CIJ1[K] = (
-                    0.5 * self.FACK * abs(self.WIJ1[K]) / (self.RHO * self.GAP[K] ** 2)
-                )
-                self.D[K] = (self.USTAR1[K] / self.DELX) + (
-                    self.SLP * self.THETA * self.CIJ1[K]
-                )
-                self.USTD1[K] = self.USTAR1[K] / self.D[K]  ### OTHER MATRIX
-            else:
-                print(f"Index out of range: K={K}, IC={self.IC}, JC={self.JC}")
-
+        for K in range(self.NK):
+            I = self.IC[K] - 1
+            J = self.JC[K] - 1
+            self.CIJ0[K] = (
+                0.5 * self.FACK * abs(self.WIJ0[K]) / (self.RHO * self.GAP[K] ** 2)
+            )
+            self.CIJ1[K] = (
+                0.5 * self.FACK * abs(self.WIJ1[K]) / (self.RHO * self.GAP[K] ** 2)
+            )
+            self.D[K] = (self.USTAR1[K] / self.DELX) + (
+                self.SLP * self.THETA * self.CIJ1[K]
+            )
+            self.USTD1[K] = self.USTAR1[K] / self.D[K]  ### OTHER MATRIX
+            
         for KK in range(self.NK):
             for II in range(self.NK):
                 if KK == II:
                     self.XUSTD1[KK][II] = self.USTD1[KK]
                 else:
-                    self.XUSTD1[KK][II] = 0
-        #print(self.XUSTD1[KK][II], "DFDX")
-        '''for K in range(self.NK):
-            print(
-                f"CIJ0[{K}] = {self.CIJ0[K]}, CIJ1[{K}] = {self.CIJ1[K]}, D[{K}] = {self.D[K]}, USTD1[{K}] = {self.USTD1[K]}"
-            )'''
+                    self.XUSTD1[KK][II] = 0.0
+        
         print("END OF XD")
 
     def XB(self):
         # Calls ski before
         print("STARTING OF XB")
+        
         self.XMLT = self.XMULT(
             self.ST, self.XUSTD1, self.XMLT, self.NCHANL, self.NK, self.NK
         )
 
-        #print(self.XMLT, "GG")
-
-        for K in range(0, self.NK):
+        for K in range(self.NK):
             SAVE1 = self.USTAR0[K] * self.WIJ0[K] / self.DELX
             SAVE2 = self.SLP * (1 - self.THETA) * self.CIJ0[K] * self.WIJ0[K]
             self.SAVE[K] = SAVE1 - SAVE2
 
-        for I in range(0, self.NCHANL):
+        for I in range(self.NCHANL):
             SUM = 0.0
-            for K in range(0, self.NK):
-                SUM += self.XMLT[I, K] * self.SAVE[K]
+            for K in range(self.NK):
+                SUM += self.XMLT[I][K] * self.SAVE[K]
             self.SS[I] = SUM
 
         self.xxa()
 
-        for I in range(0, self.NCHANL):
+        for I in range(self.NCHANL):
             self.B1[I] = self.DELX * self.SS[I] / self.A[I]
             self.B2[I] = (
                 2.0
                 * (self.F1[I] - self.F0[I])
-                * (self.F1[I] / self.A[I] / self.RHO)
+                * (self.F1[I] / (self.A[I] * self.RHO))
                 / self.A[I]
             )
             self.B[I] = self.DELX * self.XA[I] - self.B1[I] - self.B2[I]
 
-        # Print the results
-        '''for I in range(0, self.NCHANL):
-            print(
-                f"B1[{I}] = {self.B1[I ]}, B2[{I}] = {self.B2[I]}, B[{I}] = {self.B[I]}"
-            )'''
         print("END OF XB")
+    
     #Simple Matrix multiplication
     def XMULT(self, A, B, C, MM, NN, LL):
         print("Calling XMULT: ")
@@ -447,6 +383,7 @@ class sub_routines(variables):
                 C[M][L] = sum_value
         print("Ending XMULT...")
         return C
+   
     #Simple Matrix multiplication
     def YMULT(self, A, B, C, MM, NN, LL):
         print("Calling YMULT: ")

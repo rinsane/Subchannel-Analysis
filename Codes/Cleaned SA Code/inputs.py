@@ -40,7 +40,6 @@ class variables:
       self.D       = np.zeros(variables.NK)
       self.DELH    = np.zeros(variables.NK)
       self.DELX    = variables.AXLN/(variables.NNODE-1)
-      self.DELX    = variables.AXLN/(variables.NNODE-1)
       
       self.ERR     = np.zeros(variables.NK)
       self.ERROR   = np.zeros(variables.NK)
@@ -65,7 +64,7 @@ class variables:
       self.P1      = np.zeros(variables.NK, dtype=np.float64)
       self.P11     = np.zeros(variables.NK)
       self.PB      = np.zeros(variables.NK, dtype=np.float64)
-      self.PIN     = 1e6
+      self.PIN     = 0
       self.PM0     = np.zeros(variables.NK)
       
       self.Q       = np.zeros(variables.NCHANL)
