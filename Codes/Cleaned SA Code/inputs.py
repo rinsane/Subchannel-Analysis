@@ -1,5 +1,10 @@
 import numpy as np
 
+# Fi   -> F(i+1) (masflo)
+# Hi   -> H(i+1) (HM)
+# WIJi -> WIJ(i+1) (dcross)
+# Pi -> P(i+1) (aximom)
+
 class variables:
 
    ALPHA   = 90 # (ANGLE )
@@ -39,7 +44,7 @@ class variables:
       
       self.ERR     = np.zeros(variables.NK)
       self.ERROR   = np.zeros(variables.NK)
-      
+
       self.F0      = [.090576301,.090576301,.331301059,.1810780788,.331301059,.331301059,.27866318100,.39238281,.278663181,.331301059,.250849063,.501698126,.501698126,.25084906] 
       self.F1      = [0] * 14  
       self.F11     = np.zeros(variables.NK)

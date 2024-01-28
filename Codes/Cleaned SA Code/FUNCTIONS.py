@@ -264,8 +264,6 @@ class sub_routines(variables):
         self.SD = self.XMULT(self.ST, self.XDELH,self.SD, self.NCHANL, self.NK, self.NK)
         self.XHST = self.YMULT(self.XH, self.ST,self.XHST, self.NCHANL, self.NCHANL, self.NK)
 
-    
-
         for I in range(0, self.NCHANL):
             self.Q[I] = self.HF[I] * self.HPERI[I]
             #print(Q[I])

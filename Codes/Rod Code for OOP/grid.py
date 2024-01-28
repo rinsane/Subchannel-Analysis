@@ -3,7 +3,7 @@ import numpy as np
 from tabulate import tabulate
 
 drf=R1/(NF-1)
-drc=(R3-R1)/(NC-1)
+drc=(R3-R1-GT)/(NC-1)
 ### if r is fine the grid gen is automatically fine
 
 #r
@@ -12,10 +12,12 @@ for i in range(0,NF+NC):
         r_n=0
     elif(i<=NF-2):
         r_n=r_o+drf
-    elif(i==NF-1):
+    elif(i<=NF-1):
         r_n=R1
+    elif(i==NF):
+        r_n=R1+GT
     elif(i<=NF+NC-2):
-        r_n=R1+drc*(i-(NF+1))
+        r_n=R1+drc*(i-(NF))+GT
     else:
         r_n=R3
     r.append(r_n)
