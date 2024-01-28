@@ -17,7 +17,7 @@ def main():
                 NODE[i].WIJ1[K] = NODE[i].WIJIN
         
         else:
-            print("FOR NODE {i}: ")
+            print(f"FOR NODE {i}: ")
             NODE[i].P0 = NODE[i-1].P1
 
             NODE[i].F0 = NODE[i-1].F1
