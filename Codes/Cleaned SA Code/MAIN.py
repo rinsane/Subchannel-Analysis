@@ -97,6 +97,10 @@ def main():
 
         NODE[i].HM()
 
+        print(f"Pressure {i}: {NODE[i].P1}")
+        print(f"Enthalpy {i}: {NODE[i].H1}")
+        print(f"WIJ{i}      : {NODE[i].WIJ1}")
+        print(f"MassFlow {i}: {NODE[i].F1}")
 
 if __name__ == '__main__':
     main()

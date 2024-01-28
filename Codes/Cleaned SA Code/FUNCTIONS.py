@@ -6,7 +6,7 @@ import math
 class sub_routines(variables):
     def AXIMOM(self):
         # Calls SKI before
-        print("STARTING OF SUBROUTINE AXIMOM")
+        print("STARTING OF AXIMOM")
         self.star()
 
         U1 = [self.F1[I] / self.A[I] / self.RHO for I in range(self.NCHANL)]
@@ -17,7 +17,7 @@ class sub_routines(variables):
 
         self.YU1 = [[0.0] * self.NK for _ in range(self.NCHANL)]
         self.YU1 = self.YMULT(
-            self.XU1, self.ST, self.YU1, self.NCHANL, self.NCHANL, self.NK
+            XU1, self.ST, self.YU1, self.NCHANL, self.NCHANL, self.NK
         )
 
         XXU1 = [[0.0] * self.NK for _ in range(self.NCHANL)]
@@ -39,15 +39,16 @@ class sub_routines(variables):
         ]
         self.P1 = [self.DELTA * P + (1 - self.DELTA) * P for P in self.P1]
 
-        for I, p in enumerate(self.P1):
-            print(f"P1[{I}] = {p}")
+        '''for I, p in enumerate(self.P1):
+            print(f"P1[{I}] = {p}")'''
 
-        print("END OF SUB-AXIMOM")
+        print("END OF AXIMOM")
 
     def DCROSS(self):
         # Called Ski before DCROSS
         # fpr computation of diversion cross flow raTE AND AXIAL MASS FLOW F1
-        print("STARTING OF SUBROUTINE DCROSS")
+        print("STARTING OF DCROSS")
+
         for K in range(0, self.NK):
             SP1 = self.USTAR0[K] * self.WIJ0[K] / self.DELX
             SP2 = self.SLP * (1 - self.THETA) * self.CIJ0[K] * self.WIJ0[K]
@@ -66,12 +67,14 @@ class sub_routines(variables):
             self.WIJ1[K] = (SP1 - SP2 + SP3 + SP4) / self.D[K]
 
         # Print the results
-        print("WIJ1=")
+        '''print("WIJ1=")
         for K in range(0, self.NK):
-            print(f"{self.WIJ1[K]:13.6e}", end=" ")
-        print("\nEND OF SUB-DCROSS")
+            print(f"{self.WIJ1[K]:13.6e}", end=" ")'''
+        print("END OF DCROSS")
 
-    def gauss(AG, XG, YG, IG):
+    def gauss(self, AG, XG, YG, IG):
+
+        print("calling GAUSS")
         XG1 = XG.copy()  # Initialize XG1 with the initial values of XG
         ITER = 1
 
@@ -95,12 +98,13 @@ class sub_routines(variables):
             XG1 = XG.copy()
             ITER += 1
         # print(f'ITERATION={ITER}')
-        print("XG=", XG)
+        # print("XG=", XG)
+        print("GAUSS over")
         return XG
 
     def HM(self):
         # SKI called before that
-        print("STARTING OF SUBROUTINE HMW")
+        print("STARTING OF HMW")
         for K in range(0, self.NK):
             I = self.IC[K] - 1
             J = self.JC[K] - 1
@@ -154,14 +158,14 @@ class sub_routines(variables):
             self.H1[I] = self.H0[I] + self.C1[I] - self.C2[I] + self.C3[I]
 
         # Print the results
-        for I in range(0, self.NCHANL):
-            print(f"H1[{I}] = {self.H1[I]}")
+        '''for I in range(0, self.NCHANL):
+            print(f"H1[{I}] = {self.H1[I]}")'''
 
-        print("END OF SUB-HMW")
+        print("END OF HMW")
 
     def MASFLO(self):
         # Called ski before using it
-        print("STARTING OF SUBROUTINE MASFLO")
+        print("STARTING OF MASFLO")
         for I in range(0, self.NCHANL):
             SUM = 0
             for K in range(0, self.NK):
@@ -170,16 +174,16 @@ class sub_routines(variables):
             self.F1[I] = self.F0[I] - (self.DELX * SUM)
 
         # Print the results
-        print("AXIAL MASS FLOW(F1)=")
+        '''print("AXIAL MASS FLOW(F1)=")
         for I in range(0, self.NCHANL):
             print(f"{self.F1[I]:13.6e}", end=" ")
         print("\n***** TOTAL MASS FLOW= ", sum(self.F1))
-        print("\n***** TOTAL MASS FLOW initial= ", sum(self.F0))
-        print("END OF SUB-MASFLO")
+        print("\n***** TOTAL MASS FLOW initial= ", sum(self.F0))'''
+        print("END OF MASFLO")
 
     def SKI(self):
         # Works on input variables only, called once before anything uses input variables
-        print(" SKI")
+        print("STARTING OF SKI")
 
         # Check if the length of IC and JC is NK
         if len(self.IC) != self.NK or len(self.JC) != self.NK:
@@ -195,22 +199,23 @@ class sub_routines(variables):
             else:
                 print(f"Error: IC[K] or JC[K] out of bounds at K = {K + 1}.")
 
-        for K in range(self.NK):
-            print(" ".join(map(str, self.S[K])))
+        '''for K in range(self.NK):
+            print(" ".join(map(str, self.S[K])))'''
 
-        print("TRANSPOSE OF MATRIX")
+        #print("TRANSPOSE OF MATRIX")
 
         # Computation of transpose matrix ST
         for I in range(self.NCHANL):
             for K in range(self.NK):
                 self.ST[I][K] = self.S[K][I]
-                print(self.ST[I][K])
-        for I in range(self.NCHANL):
-            print(" ".join(map(str, self.ST[I])))
+                #print(self.ST[I][K])
+        '''for I in range(self.NCHANL):
+            print(" ".join(map(str, self.ST[I])))'''
+        print("END OF SKI")
 
     def star(self):
         # called ski before using
-        print("STARTING OF SUB-STAR")
+        print("STARTING OF STAR")
 
         for K in range(self.NK):
             I = self.IC[K] - 1
@@ -248,8 +253,9 @@ class sub_routines(variables):
                     self.XUST1[KK][II] = 0.0
 
         # Print USTAR0 and USTAR1
-        for K in range(self.NK):
-            print(f"USTAR0[{K}] = {self.USTAR0[K]}, USTAR1[{K}] = {self.USTAR1[K]}")
+        '''for K in range(self.NK):
+            print(f"USTAR0[{K}] = {self.USTAR0[K]}, USTAR1[{K}] = {self.USTAR1[K]}")'''
+        print("END OF STAR")
 
     def wprim(self):
         # called ski before using
@@ -257,7 +263,7 @@ class sub_routines(variables):
         # F1 = [0] * 20 ### check it
         # wpr= beta*gap*avg mass flux
 
-        print("SUBROUTINE WPRIM")
+        print("STARTING OF WPRIM")
 
         for K in range(self.NK):
             I = self.IC[K] - 1
@@ -282,7 +288,7 @@ class sub_routines(variables):
                     * ((self.GAP[K] / self.RDIA) ** (1 - 0.4))
                 )  ### correlation for beta taken from finding
 
-                print(
+                '''print(
                     "AVRE:",
                     AVRE,
                     "AHDIA:",
@@ -291,12 +297,11 @@ class sub_routines(variables):
                     self.GAP[K],
                     "RDIA:",
                     self.RDIA,
-                )
+                )'''
 
-                self.WPR = (
+                self.WPR[K] = (
                     BETA * self.GAP[K] * AVRE * self.VISC / AHDIA
                 )  ## wpr is turbulent cross flow
-                # print(WPR)
             else:
                 print(f"Invalid indices for AHDIA: K={K}, I={I}, J={J}")
 
@@ -311,7 +316,7 @@ class sub_routines(variables):
                 # print(len(XZ))
                 self.XZ[K] = (
                     ((self.F1[I] / self.A[I]) - (self.F1[J] / self.A[J]))
-                    * self.WPR
+                    * self.WPR[K]
                     / self.RHO
                 )
                 # print(XZ[K])
@@ -330,11 +335,11 @@ class sub_routines(variables):
                     # print(ST[I][K])################ PROBLEM IS HERE
             if 0 <= I < len(self.XY) and 0 <= I < len(self.A):
                 self.XY[I] = self.FT * SUM / self.A[I]
-                print(f"XY[{I}] = {self.XY[I]}")
+                #print(f"XY[{I}] = {self.XY[I]}")
             else:
                 print(f"Invalid index for XY: I={I}")
 
-        print("END OF SUB-WPRIM")
+        print("END OF WPRIM")
 
     def xxa(self):
         # Calls Ski before
@@ -347,7 +352,7 @@ class sub_routines(variables):
         # S = [[0.0] * NK for _ in range(NCHANL)]
         # ST = [[0.0] * NCHANL for _ in range(NK)]
 
-        print("SUBROUTINE XXA")
+        print("STARTING OF XXA")
 
         # Call to WPRIM (assuming it's another subroutine)
         self.wprim()
@@ -371,14 +376,14 @@ class sub_routines(variables):
 
         # Print statements for debugging (commented out)
         # print('RE FACF XA')
-        for I in range(0, self.NCHANL):
-            print(self.RE[I], FACF[I], self.XA[I])
+        '''for I in range(0, self.NCHANL):
+            print(self.RE[I], FACF[I], self.XA[I])'''
 
-        print("END OF SUB-XXA")
+        print("END OF XXA")
 
     def XD(self):
-        print(self.DELX)
-        print("subroutine XD")
+        # print(self.DELX)
+        print("STARTING OF XD")
         self.star()
 
         for K in range(0, self.NK):
@@ -404,20 +409,21 @@ class sub_routines(variables):
                     self.XUSTD1[KK][II] = self.USTD1[KK]
                 else:
                     self.XUSTD1[KK][II] = 0
-        print(self.XUSTD1[KK][II], "DFDX")
-        for K in range(self.NK):
+        #print(self.XUSTD1[KK][II], "DFDX")
+        '''for K in range(self.NK):
             print(
                 f"CIJ0[{K}] = {self.CIJ0[K]}, CIJ1[{K}] = {self.CIJ1[K]}, D[{K}] = {self.D[K]}, USTD1[{K}] = {self.USTD1[K]}"
-            )
+            )'''
+        print("END OF XD")
 
     def XB(self):
         # Calls ski before
-        print("subroutine XB")
+        print("STARTING OF XB")
         self.XMLT = self.XMULT(
             self.ST, self.XUSTD1, self.XMLT, self.NCHANL, self.NK, self.NK
         )
 
-        print(self.XMLT, "GG")
+        #print(self.XMLT, "GG")
 
         for K in range(0, self.NK):
             SAVE1 = self.USTAR0[K] * self.WIJ0[K] / self.DELX
@@ -443,12 +449,14 @@ class sub_routines(variables):
             self.B[I] = self.DELX * self.XA[I] - self.B1[I] - self.B2[I]
 
         # Print the results
-        for I in range(0, self.NCHANL):
+        '''for I in range(0, self.NCHANL):
             print(
                 f"B1[{I}] = {self.B1[I ]}, B2[{I}] = {self.B2[I]}, B[{I}] = {self.B[I]}"
-            )
+            )'''
+        print("END OF XB")
 
-    def XMULT(A, B, C, MM, NN, LL):
+    def XMULT(self, A, B, C, MM, NN, LL):
+        print("Calling XMULT: ")
         print(f"Dimensions of A: {np.array(A).shape}")
         print(f"Dimensions of B: {np.array(B).shape}")
         print(f"Dimensions of C: {np.array(C).shape}")
@@ -459,9 +467,11 @@ class sub_routines(variables):
                 for N in range(0, NN):
                     sum_value += A[M][N] * B[N][L]
                 C[M][L] = sum_value
+        print("Ending XMULT...")
         return C
 
-    def YMULT(A, B, C, MM, NN, LL):
+    def YMULT(self, A, B, C, MM, NN, LL):
+        print("Calling YMULT: ")
         print(f"Dimensions of A: {np.array(A).shape}")
         print(f"Dimensions of B: {np.array(B).shape}")
         print(f"Dimensions of C: {np.array(C).shape}")
@@ -472,4 +482,5 @@ class sub_routines(variables):
                 for N in range(0, NN):
                     sum_value += A[M][N] * B[N][L]
                 C[M][L] = sum_value
+        print("Ending YMULT...")
         return C

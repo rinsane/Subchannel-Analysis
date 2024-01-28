@@ -26,7 +26,7 @@ def wprim():
             
             print("AVRE:", AVRE, "AHDIA:", AHDIA, "GAP[K]:", GAP[K], "RDIA:", RDIA)
 
-            WPR = BETA * GAP[K] * AVRE * VISC / AHDIA                                                       ## wpr is turbulent cross flow
+            WPR[K] = BETA * GAP[K] * AVRE * VISC / AHDIA                                                       ## wpr is turbulent cross flow
             #print(WPR)
         else:
             print(f"Invalid indices for AHDIA: K={K}, I={I}, J={J}")
@@ -44,7 +44,7 @@ def wprim():
         J = JC[K] - 1
         if 0 <= I < len(IC) and 0 <= J < len(JC) and 0 <= K < len(XZ):
             #print(len(XZ))
-            XZ[K] = ((F1[I] / A[I]) - (F1[J] / A[J])) * WPR / RHO
+            XZ[K] = ((F1[I] / A[I]) - (F1[J] / A[J])) * WPR[K] / RHO
             #print(XZ[K])
         else:
             print(f"Invalid indices for XZ: K={K}, I={I}, J={J}")
