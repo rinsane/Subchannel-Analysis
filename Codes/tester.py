@@ -7,4 +7,6 @@ class checker(vars):
 
 apple = checker()
 
-print(apple)
+print(apple.two, apple.one)
+apple.two = 55
+print(apple.two, apple.one)

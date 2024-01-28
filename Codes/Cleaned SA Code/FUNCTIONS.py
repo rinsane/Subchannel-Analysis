@@ -5,5 +5,3 @@ class sub_routines(variables):
 
     def __init__(self):
         variables.__init__(self)
-
-    
