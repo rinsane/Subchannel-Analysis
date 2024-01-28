@@ -4,27 +4,30 @@ import math
 
 
 class sub_routines(variables):
+
     def AXIMOM(self):
         # Calls SKI before
         print("STARTING OF AXIMOM")
         self.star()
 
-        U1 = [self.F1[I] / self.A[I] / self.RHO for I in range(self.NCHANL)]
+        U1 = [self.F1[I] / (self.A[I] * self.RHO) for I in range(self.NCHANL)]
         XU1 = [
             [U1[I] if I == J else 0.0 for J in range(self.NCHANL)]
             for I in range(self.NCHANL)
         ]
 
-        self.YU1 = [[0.0] * self.NK for _ in range(self.NCHANL)]
+        self.YU1 = [[0.0] * self.NK for _ in range(self.NK)]
         self.YU1 = self.YMULT(
             XU1, self.ST, self.YU1, self.NCHANL, self.NCHANL, self.NK
         )
 
-        XXU1 = [[0.0] * self.NK for _ in range(self.NCHANL)]
-        XXU1 = self.XMULT(self.ST, self.XUST1, XXU1, self.NCHANL, self.NK, self.NK)
+        XXU1 = [[0.0] * self.NK for _ in range(self.NK)]
+        XXU1 = self.XMULT(
+            self.ST, self.XUST1, XXU1, self.NCHANL, self.NK, self.NK
+        )
 
-        Z1 = [0.0] * self.NCHANL
-        Z2 = [0.0] * self.NCHANL
+        Z1 = [0.0] * self.NK
+        Z2 = [0.0] * self.NK
 
         for I in range(self.NCHANL):
             SUM1 = sum(self.YU1[I][K] * self.WIJ1[K] for K in range(self.NK))
@@ -33,11 +36,9 @@ class sub_routines(variables):
             Z1[I] = 2.0 * self.DELX * SUM1 / self.A[I]
             Z2[I] = self.DELX * SUM2 / self.A[I]
 
-        self.P1 = [
-            self.P0[I] + self.DELX * self.XA[I] + Z1[I] - Z2[I]
-            for I in range(self.NCHANL)
-        ]
-        self.P1 = [self.DELTA * P + (1 - self.DELTA) * P for P in self.P1]
+        for I in range(self.NCHANL):
+            self.P1[I] = self.P0[I] + (self.DELX * self.XA[I]) + Z1[I] - Z2[I]
+            self.P1[I] = (self.DELX * self.P1[I]) + ((1 - self.DELTA) * self.P1[I])
 
         '''for I, p in enumerate(self.P1):
             print(f"P1[{I}] = {p}")'''
@@ -73,9 +74,12 @@ class sub_routines(variables):
         print("END OF DCROSS")
 
     def gauss(self):
+
+        # gauss(AG = XMI, XG = P1, YG = PB, IG = NCHANL)
         print("calling GAUSS")
-        XG1 = self.P1.copy()  # Initialize self.P11 with the initial values of self.P1
-        
+        XG1 = [0.12e8] * self.NCHANL  # Initialize self.P11 with the initial values of self.P1
+        XG = [0] * self.NCHANL
+
         print("P1: ")
         print(self.P1)
         
@@ -86,18 +90,17 @@ class sub_routines(variables):
                     if I == J:
                         continue
                     else:
-                        AP -= self.XMI[I][J] * self.P1[J]
-
-                self.P1[I] = AP / self.XMI[I][I]
+                        AP = AP - self.XMI[I][J] * self.P1[J]
+ 
+                XG[I] = AP / self.XMI[I][I]
                 
-            self.ERR = [abs(self.P1[i] - XG1[i]) / abs(self.P1[i]) for i in range(self.NCHANL)]
+            self.ERR = [abs(XG[i] - XG1[i]) / abs(XG[i]) for i in range(self.NCHANL)]
             ERRMAX = max(self.ERR)
 
             if ERRMAX <= 1e-08:
                 break
-
-            XG1 = self.P1.copy()
-
+            XG1 = XG.copy()
+        self.P1 = XG.copy()
         print("GAUSS over")
 
     def HM(self):
@@ -138,6 +141,9 @@ class sub_routines(variables):
             # print(Q[I])
         for I in range(0, self.NCHANL):
             self.C1[I] = self.Q[I] * self.DELX / self.F1[I]
+            #print(self.C1[I], end = ' ')
+        #print()
+
 
         for II in range(0, self.NCHANL):
             SUM3 = 0
@@ -183,32 +189,19 @@ class sub_routines(variables):
         # Works on input variables only, called once before anything uses input variables
         print("STARTING OF SKI")
 
-        # Check if the length of IC and JC is NK
-        if len(self.IC) != self.NK or len(self.JC) != self.NK:
-            print("Error: Length of IC or JC is not equal to NK.")
-
-        # Computation of S matrix
         for K in range(self.NK):
-            if 1 <= self.IC[K] <= self.NCHANL and 1 <= self.JC[K] <= self.NCHANL:
-                IK = self.IC[K] - 1
-                JK = self.JC[K] - 1
-                self.S[K][IK] = 1
-                self.S[K][JK] = -1
-            else:
-                print(f"Error: IC[K] or JC[K] out of bounds at K = {K + 1}.")
-
-        '''for K in range(self.NK):
-            print(" ".join(map(str, self.S[K])))'''
-
-        #print("TRANSPOSE OF MATRIX")
+            for I in range(self.NCHANL):
+                self.S[K][I] = 0
+                if I == self.IC[K]:
+                    self.S[K][I] = 1
+                if I == self.JC[K]:
+                    self.S[K][I] = -1
 
         # Computation of transpose matrix ST
         for I in range(self.NCHANL):
             for K in range(self.NK):
                 self.ST[I][K] = self.S[K][I]
-                #print(self.ST[I][K])
-        '''for I in range(self.NCHANL):
-            print(" ".join(map(str, self.ST[I])))'''
+        
         print("END OF SKI")
 
     def star(self):
