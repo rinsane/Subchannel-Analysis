@@ -77,20 +77,20 @@ class sub_routines(variables):
                 print(f"Error: IC[K] or JC[K] out of bounds at K = {K + 1}.")
             
 
-            for K in range(self.NK):
-                print(' '.join(map(str, self.S[K])))
+        for K in range(self.NK):
+            print(' '.join(map(str, self.S[K])))
 
-                print('TRANSPOSE OF MATRIX')
+        print('TRANSPOSE OF MATRIX')
 
             # Computation of transpose matrix ST
-            for I in range(self.NCHANL):
-                for K in range(self.NK):
-                    self.ST[I][K] = self.S[K][I]
-                    print(self.ST[I][K])
-                for I in range(self.NCHANL):
-                    print(' '.join(map(str, self.ST[I])))
+        for I in range(self.NCHANL):
+            for K in range(self.NK):
+                self.ST[I][K] = self.S[K][I]
+                print(self.ST[I][K])
+        for I in range(self.NCHANL):
+                print(' '.join(map(str, self.ST[I])))
 
-            # Call the subroutine
+        # Call the subroutine
 
     def star(self):
         #called ski before using 
@@ -218,16 +218,16 @@ class sub_routines(variables):
             SUM3 = 0
             SUM4 = 0
 
-        for I in range(0, self.NCHANL):
-            SP3 = self.S[K][I] * self.P1[I]
-            SP4 = self.S[K][I] * self.P0[I]
-            SUM3 += SP3
-            SUM4 += SP4
+            for I in range(0, self.NCHANL):
+                SP3 = self.S[K][I] * self.P1[I]
+                SP4 = self.S[K][I] * self.P0[I]
+                SUM3 += SP3
+                SUM4 += SP4
 
-        SP3 = self.SLP * self.THETA * SUM3
-        SP4 = self.SLP * (1 - self.THETA) * SUM4
+            SP3 = self.SLP * self.THETA * SUM3
+            SP4 = self.SLP * (1 - self.THETA) * SUM4
 
-        self.WIJ1[K] = (SP1 - SP2 + SP3 + SP4) / self.D[K]
+            self.WIJ1[K] = (SP1 - SP2 + SP3 + SP4) / self.D[K]
 
         # Print the results
         print("WIJ1=")
