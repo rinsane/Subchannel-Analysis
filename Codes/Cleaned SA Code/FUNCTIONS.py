@@ -1,5 +1,6 @@
 import numpy as np
 from INPUTS import variables
+import math
 
 class sub_routines(variables):
     def XMULT(A, B, C, MM, NN, LL):
@@ -112,7 +113,7 @@ class sub_routines(variables):
                 self.USTAR0[K] = self.F0[J] / (self.A[J] * self.RHO)
             elif self.F0[I] and self.F0[J]:
                 self.USTAR0[K] = 0.5 * ((self.F0[I] / (self.A[I] * self.RHO)) + (self.F0[J] / (self.A[J] * self.RHO)))
-            elif F0[I]:
+            elif self.F0[I]:
                 self.USTAR0[K] = self.F0[I] / (self.A[I] * self.RHO)
 
         for KK in range(self.NK):
@@ -418,7 +419,8 @@ class sub_routines(variables):
             print(f'P1[{I}] = {p}')
 
         print("END OF SUB-AXIMOM")
-
+        
+    
     pass
 
     
