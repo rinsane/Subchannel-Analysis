@@ -1,7 +1,6 @@
 from inputs import*
 from SKI import*
 def star():
-    
 
     print('STARTING OF SUB-STAR')
 
