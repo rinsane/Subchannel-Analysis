@@ -450,7 +450,7 @@ class sub_routines(variables):
                 f"B1[{I}] = {self.B1[I ]}, B2[{I}] = {self.B2[I]}, B[{I}] = {self.B[I]}"
             )'''
         print("END OF XB")
-
+    #Simple Matrix multiplication
     def XMULT(self, A, B, C, MM, NN, LL):
         print("Calling XMULT: ")
         print(f"Dimensions of A: {np.array(A).shape}")
@@ -465,7 +465,7 @@ class sub_routines(variables):
                 C[M][L] = sum_value
         print("Ending XMULT...")
         return C
-
+    #Simple Matrix multiplication
     def YMULT(self, A, B, C, MM, NN, LL):
         print("Calling YMULT: ")
         print(f"Dimensions of A: {np.array(A).shape}")
