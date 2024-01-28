@@ -16,6 +16,7 @@ for i in range(dum.NNODE):
         for K in range(dum.NK):
             NODE[i].WIJ0[K] = NODE[i].WIJIN
             NODE[i].WIJ1[K] = NODE[i].WIJIN
+
         NODE[i].XD()
         NODE[i].XB()
         NODE[i].YMULT(
@@ -27,7 +28,6 @@ for i in range(dum.NNODE):
                 NODE[i].XM[I, J] = (
                     NODE[i].DELX * dum.SLP * NODE[i].XM[I, J] / NODE[i].A[I]
                 )
-                # print(NODE[i].XM)
 
         for II in range(dum.NCHANL):
             for JJ in range(dum.NCHANL):
@@ -35,7 +35,6 @@ for i in range(dum.NNODE):
                     NODE[i].XMI[II, JJ] = dum.THETA * NODE[i].XM[II, JJ] + 1
                 else:
                     NODE[i].XMI[II, JJ] = dum.THETA * NODE[i].XM[II, JJ]
-            print(NODE[i].XMI[II, JJ], "XDFFG")
 
         for I in range(dum.NCHANL):
             for J in range(dum.NCHANL):
@@ -50,7 +49,6 @@ for i in range(dum.NNODE):
             NODE[i].PB[I] = NODE[i].B[I] + NODE[i].PM0[I]
 
         NODE[i].gauss(NODE[i].XMI, NODE[i].P1, NODE[i].PB, dum.NCHANL)
-        print(NODE[i].P1, "NODE[i].P1")
         NODE[i].DCROSS()
 
         for K in range(dum.NK):
@@ -84,6 +82,7 @@ for i in range(dum.NNODE):
                     break
         else:
             break
+
         NODE[i].HM()
 
     else:
@@ -109,7 +108,6 @@ for i in range(dum.NNODE):
         for I in range(dum.NCHANL):
             for J in range(dum.NCHANL):
                 NODE[i].XM0[I, J] = NODE[i].XMI[I, J] - NODE[i].XM[I, J]
-                # print("dzff")
 
         for I in range(dum.NCHANL):
             SUM = 0
@@ -118,6 +116,7 @@ for i in range(dum.NNODE):
                 SUM = SUM + PM  ## CHECK THIS ALLIGNMENT
             NODE[i].PM0[I] = SUM
             NODE[i].PB[I] = NODE[i].B[I] = +NODE[i].PM0[I]
+        
         NODE[i].gauss(NODE[i].XMI, NODE[i].P1, NODE[i].PB, dum.NCHANL)
         NODE[i].DCROSS()
 
@@ -127,7 +126,6 @@ for i in range(dum.NNODE):
         for I in range(dum.NCHANL):
             NODE[i].F11[I] = NODE[i].F1[I]
         NODE[i].MASFLO()
-        print("DFHH")
 
         for I in range(dum.NCHANL):
             NODE[i].ERROR[I] = abs((NODE[i].F11[I] - NODE[i].F1[I]) / NODE[i].F1[I])
