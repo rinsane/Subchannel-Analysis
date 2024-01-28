@@ -1,5 +1,5 @@
 import numpy as np
-from inputs import variables
+from INPUTS import variables
 
 class sub_routines(variables):
     pass
