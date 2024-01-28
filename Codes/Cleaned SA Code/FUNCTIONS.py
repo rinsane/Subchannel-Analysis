@@ -418,8 +418,7 @@ class sub_routines(variables):
             print(f'P1[{I}] = {p}')
 
         print("END OF SUB-AXIMOM")
-        
-    
+
     pass
 
     
