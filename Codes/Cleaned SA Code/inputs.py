@@ -65,7 +65,7 @@ class variables:
       self.P1      = np.zeros(variables.NK, dtype=np.float64)
       self.P11     = np.zeros(variables.NK)
       self.PB      = np.zeros(variables.NK, dtype=np.float64)
-      self.PIN     = 12262500
+      self.PIN     = 1e6
       self.PM0     = np.zeros(variables.NK)
       
       self.Q       = np.zeros(variables.NCHANL)

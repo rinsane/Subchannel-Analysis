@@ -75,10 +75,10 @@ class sub_routines(variables):
     def gauss(self):
         print("calling GAUSS")
         XG1 = self.P1.copy()  # Initialize self.P11 with the initial values of self.P1
-        '''print("XMI: ")
-        print(self.XMI)
+        
         print("P1: ")
-        print(self.P1)'''
+        print(self.P1)
+        
         while True:
             for I in range(self.NCHANL):
                 AP = self.PB[I]
@@ -97,7 +97,6 @@ class sub_routines(variables):
                 break
 
             XG1 = self.P1.copy()
-        print(self.P1)
 
         print("GAUSS over")
 
