@@ -12,6 +12,7 @@ def main():
                 NODE[i].F1[I] = NODE[i].F0[I]
                 NODE[i].P0[I] = NODE[i].PIN
             print("FOR NODE ZERO (init) \n\n")
+                  
 
             for K in range(NODE[i].NK):
                 NODE[i].WIJ0[K] = NODE[i].WIJIN
