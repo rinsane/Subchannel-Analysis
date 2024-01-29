@@ -77,28 +77,37 @@ def main():
 
         EMAX = max(NODE[i].ERROR)
         
-        '''if EMAX > 0.01:  ## CHECK ALIGNMENT HERE
+        if EMAX > 0.01:  ## CHECK ALIGNMENT HERE
             while True:
                 NODE[i].AXIMOM()
+                print(NODE[i].F1)
                 for K in range(NODE[i].NK):
                     NODE[i].W2[K] = NODE[i].WIJ1[K]
+                print(NODE[i].F1)
                 NODE[i].DCROSS()
+                print(NODE[i].F1)
                 for K in range(NODE[i].NK):
                     NODE[i].WIJ1[K] = (
                         NODE[i].GAMA * NODE[i].WIJ1[K] + (1 - NODE[i].GAMA) * NODE[i].WIJ0[K]
                     )
+                print(NODE[i].F1)
                 for I in range(NODE[i].NCHANL):
                     NODE[i].F11[I] = NODE[i].F1[I]
+                print(NODE[i].F1)
                 NODE[i].MASFLO()
+                print(NODE[i].F1)
                 for I in range(NODE[i].NCHANL):
                     if NODE[i].F1[I] <= 0:
                         sys.exit("MASS was less than 0")
                     NODE[i].ERR[I] = abs((NODE[i].F1[I] - NODE[i].F11[I]) / NODE[i].F1[I])
+                print(NODE[i].F1)
                 ERRMAX = max(NODE[i].ERR)
+                print(NODE[i].F1)
                 if ERRMAX <= 0.01:
                     break
                 else:
-                    continue'''
+                    continue
+                print(NODE[i].F1)
         NODE[i].HM()
 
         print(f"Pressure {i}: {NODE[i].P1}\n")
