@@ -75,31 +75,30 @@ def main():
 
         for I in range(NODE[i].NCHANL):
             NODE[i].ERROR[I] = abs((NODE[i].F11[I] - NODE[i].F1[I]) / NODE[i].F1[I])
-
-        EMAX = max(NODE[i].ERROR)
         
-        '''if EMAX > 0.01:  ## CHECK ALIGNMENT HERE
-            while True:
-                NODE[i].AXIMOM()
-                for K in range(NODE[i].NK):
-                    NODE[i].W2[K] = NODE[i].WIJ1[K]
-                NODE[i].DCROSS()
-                for K in range(NODE[i].NK):
-                    NODE[i].WIJ1[K] = (
-                        NODE[i].GAMA * NODE[i].WIJ1[K] + (1 - NODE[i].GAMA) * NODE[i].WIJ0[K]
-                    )
-                for I in range(NODE[i].NCHANL):
-                    NODE[i].F11[I] = NODE[i].F1[I]
-                NODE[i].MASFLO()
-                for I in range(NODE[i].NCHANL):
-                    if NODE[i].F1[I] <= 0:
-                        sys.exit("MASS was less than 0")
-                    NODE[i].ERR[I] = abs((NODE[i].F1[I] - NODE[i].F11[I]) / NODE[i].F1[I])
-                ERRMAX = max(NODE[i].ERR)
-                if ERRMAX <= 0.01:
-                    break
-                else:
-                    continue'''
+        EMAX = max(NODE[i].ERROR)
+
+        
+        while EMAX > 0.01:
+            for I in range(NODE[i].NCHANL):
+                NODE[i].P1[I] = NODE[i].GAMA * NODE[i].P1[I] + (1 - NODE[i].GAMA) * NODE[i].P0[I]
+            
+            NODE[i].gauss()
+            NODE[i].DCROSS()
+
+            for K in range(NODE[i].NK):
+                NODE[i].WIJ1[K] = - NODE[i].WIJ1[K]
+
+            for I in range(NODE[i].NCHANL):
+                NODE[i].F11[I] = NODE[i].F1[I]
+            
+            NODE[i].MASFLO()
+
+            for I in range(NODE[i].NCHANL):
+                NODE[i].ERROR[I] = abs((NODE[i].F11[I] - NODE[i].F1[I]) / NODE[i].F1[I])
+            
+            EMAX = max(NODE[i].ERROR)
+                        
         NODE[i].HM()
 
         print(f"Pressure {i}: {NODE[i].P1}\n")
