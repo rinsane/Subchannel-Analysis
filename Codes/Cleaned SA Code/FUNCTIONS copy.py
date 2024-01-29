@@ -69,36 +69,7 @@ class sub_routines(variables):
         #print("END OF DCROSS")
 
     def gauss(self):
-        #Calculating the MJ
-        self.XM = self.YMULT(
-            self.XMLT, self.S, self.XM, self.NCHANL, self.NK,self.NCHANL
-        )
-
-        for I in range(self.NCHANL):
-            for J in range(self.NCHANL):
-               self.XM[I][J] = (
-                    self.DELX * self.SLP * self.XM[I][J] / (self.A[I] *self.D[I] )
-                )
-
-        for II in range(self.NCHANL):
-            for JJ in range(self.NCHANL):
-                if II == JJ:
-                    self.XMI[II][JJ] = self.THETA * self.XM[II][JJ] + 1
-                else:
-                    self.XMI[II][JJ] = self.THETA * self.XM[II][JJ]
-
-        for I in range(self.NCHANL):
-            for J in range(self.NCHANL):
-                self.XM0[I][J] = self.XMI[I][J] - self.XM[I][J]
-
-        for I in range(self.NCHANL):
-            SUM = 0
-            for J in range(self.NCHANL):
-                PM = self.XM0[I][J] * self.P0[J]
-                SUM += PM
-            self.PM0[I] = SUM
-            self.PB[I] = self.B[I] + self.PM0[I]
-
+        
 
         # gauss(AG = XMI, XG = P1, YG = PB, IG = NCHANL)
         #print("calling GAUSS")
@@ -193,7 +164,7 @@ class sub_routines(variables):
             for K in range(self.NK):
                 SW = self.ST[I][K] * self.WIJ1[K]
                 SUM += SW
-            self.F1[I] = self.F0[I] - (self.DELX * SUM)
+                self.F1[I] = self.F0[I] - (self.DELX * SUM)
 
         #print("FTOTAL: ", sum(self.F1))
         #print("END OF MASFLO")
@@ -337,7 +308,6 @@ class sub_routines(variables):
         #print("END OF XXA")
 
     def XD(self):
-        #Calculating D matrix
         # print(self.DELX)
         #print("STARTING OF XD")
         self.star()
@@ -366,10 +336,9 @@ class sub_routines(variables):
         #print("END OF XD")
 
     def XB(self):
-        #calculating B matrix
         # Calls ski before
         #print("STARTING OF XB")
-        SAVE    = np.zeros(self.NK)
+        
         self.XMLT = self.XMULT(
             self.ST, self.XUSTD1, self.XMLT, self.NCHANL, self.NK, self.NK
         )
@@ -377,12 +346,12 @@ class sub_routines(variables):
         for K in range(self.NK):
             SAVE1 = self.USTAR0[K] * self.WIJ0[K] / self.DELX
             SAVE2 = self.SLP * (1 - self.THETA) * self.CIJ0[K] * self.WIJ0[K]
-            SAVE[K] = SAVE1 - SAVE2
+            self.SAVE[K] = SAVE1 - SAVE2
 
         for I in range(self.NCHANL):
             SUM = 0.0
             for K in range(self.NK):
-                SUM += self.XMLT[I][K] * SAVE[K]
+                SUM += self.XMLT[I][K] * self.SAVE[K]
             self.SS[I] = SUM
 
         self.xxa()

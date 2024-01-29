@@ -1,6 +1,5 @@
 from FUNCTIONS import sub_routines
 import sys
-from tabulate import tabulate
 
 def main():
 
@@ -36,39 +35,48 @@ def main():
         NODE[i].SKI()
         NODE[i].XD()
         NODE[i].XB()
+
+        #Calculating the MJ
+        NODE[i].XM = NODE[i].YMULT(
+            NODE[i].XMLT, NODE[i].S, NODE[i].XM, NODE[i].NCHANL, NODE[i].NK, NODE[i].NCHANL
+        )
+
+        for I in range(NODE[i].NCHANL):
+            for J in range(NODE[i].NCHANL):
+                NODE[i].XM[I][J] = (
+                    NODE[i].DELX * NODE[i].SLP * NODE[i].XM[I][J] / NODE[i].A[I]
+                )
+
+        for II in range(NODE[i].NCHANL):
+            for JJ in range(NODE[i].NCHANL):
+                if II == JJ:
+                    NODE[i].XMI[II][JJ] = NODE[i].THETA * NODE[i].XM[II][JJ] + 1
+                else:
+                    NODE[i].XMI[II][JJ] = NODE[i].THETA * NODE[i].XM[II][JJ]
+
+        for I in range(NODE[i].NCHANL):
+            for J in range(NODE[i].NCHANL):
+                NODE[i].XM0[I][J] = NODE[i].XMI[I][J] - NODE[i].XM[I][J]
+
+        for I in range(NODE[i].NCHANL):
+            SUM = 0
+            for J in range(NODE[i].NCHANL):
+                PM = NODE[i].XM0[I][J] * NODE[i].P0[J]
+                SUM += PM
+            NODE[i].PM0[I] = SUM
+            NODE[i].PB[I] = NODE[i].B[I] + NODE[i].PM0[I]
+
         NODE[i].gauss()
         NODE[i].DCROSS()
 
-        #Reversing the flow
         for K in range(NODE[i].NK):
             NODE[i].WIJ1[K] = - NODE[i].WIJ1[K]
-        
-        NODE[i].MASFLO()
-        #copying the F1 in F11
+
         for I in range(NODE[i].NCHANL):
             NODE[i].F11[I] = NODE[i].F1[I]
         
-        '''
-        P1, WIJ1, F1, -- calculated from above functions respectively
-        now introducing checks if P1, F1, is positive or not
-        '''
-        #Check for P1
-        for I in range(NODE[i].NCHANL):
-            if(NODE[i].P1[I] < 0 ):
-                print("Negative pressure in P1 at node {i}")
-                print(tabulate([[NODE[i].P1[I], NODE[i].F1[I]] for I in range(14)], headers=['P1', 'F1'], tablefmt = 'grid'))
-                print(tabulate([[NODE[i].WIJ1[I]] for I in range(19)], headers=['WIJ1'], tablefmt = 'grid'))
-                sys.exit()
-        #Check for F1
-        for I in range(NODE[i].NCHANL):
-            if(NODE[i].F1[I] < 0 ):
-                print("Negative massflow rate in F1 at node {i}")
-                print(tabulate([[NODE[i].P1[I], NODE[i].F1[I]] for I in range(14)], headers=['P1', 'F1'], tablefmt = 'grid'))
-                print(tabulate([[NODE[i].WIJ1[I]] for I in range(19)], headers=['WIJ1'], tablefmt = 'grid'))
-                sys.exit()
-        print("All checks passes for P1 and F1 and WIj1, values are listed below")
-        print(tabulate([[NODE[i].P1[I], NODE[i].F1[I]] for I in range(14)], headers=['P1', 'F1'], tablefmt = 'grid'))
-        print(tabulate([[NODE[i].WIJ1[I]] for I in range(19)], headers=['WIJ1'], tablefmt = 'grid'))
+        NODE[i].MASFLO()
+
         for I in range(NODE[i].NCHANL):
             NODE[i].ERROR[I] = abs((NODE[i].F11[I] - NODE[i].F1[I]) / NODE[i].F1[I])
         
