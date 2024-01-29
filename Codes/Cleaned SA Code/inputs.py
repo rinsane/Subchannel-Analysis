@@ -10,9 +10,9 @@ class variables:
    ALPHA   = 90 # (ANGLE )
    AXLN    = 5.9436
    DELTA   = 0.5
-   FACK    = 0.5
+   FACK    = 0.1
    FT      = 0.1 # turbulent factor used to compensate imperfect analogy bw turbulent transport of enthalpy and momentum
-   GAMA    = 0.1
+   GAMA    = 0.6
    GC      = 9.81 # g
    NCHANL  = 14 # no of subchannel
    NK      = 19 # no of connections
@@ -64,7 +64,7 @@ class variables:
       self.P1      = np.zeros(variables.NK, dtype=np.float64)
       self.P11     = np.zeros(variables.NK)
       self.PB      = np.zeros(variables.NK, dtype=np.float64)
-      self.PIN     = 0
+      self.PIN     = 122625000
       self.PM0     = np.zeros(variables.NK)
       
       self.Q       = np.zeros(variables.NCHANL)

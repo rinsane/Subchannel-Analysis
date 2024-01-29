@@ -370,10 +370,10 @@ class sub_routines(variables):
     
     #Simple Matrix multiplication
     def XMULT(self, A, B, C, MM, NN, LL):
-        print("Calling XMULT: ")
-        print(f"Dimensions of A: {np.array(A).shape}")
-        print(f"Dimensions of B: {np.array(B).shape}")
-        print(f"Dimensions of C: {np.array(C).shape}")
+        #print("Calling XMULT: ")
+        #print(f"Dimensions of A: {np.array(A).shape}")
+        #print(f"Dimensions of B: {np.array(B).shape}")
+        #print(f"Dimensions of C: {np.array(C).shape}")
 
         for M in range(0, MM):
             for L in range(0, LL):
@@ -381,15 +381,15 @@ class sub_routines(variables):
                 for N in range(0, NN):
                     sum_value += A[M][N] * B[N][L]
                 C[M][L] = sum_value
-        print("Ending XMULT...")
+        #print("Ending XMULT...")
         return C
    
     #Simple Matrix multiplication
     def YMULT(self, A, B, C, MM, NN, LL):
-        print("Calling YMULT: ")
-        print(f"Dimensions of A: {np.array(A).shape}")
-        print(f"Dimensions of B: {np.array(B).shape}")
-        print(f"Dimensions of C: {np.array(C).shape}")
+        #print("Calling YMULT: ")
+        #print(f"Dimensions of A: {np.array(A).shape}")
+        #print(f"Dimensions of B: {np.array(B).shape}")
+        #print(f"Dimensions of C: {np.array(C).shape}")
 
         for M in range(0, MM):
             for L in range(0, LL):
