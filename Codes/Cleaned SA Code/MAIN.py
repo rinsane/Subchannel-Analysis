@@ -98,8 +98,7 @@ def main():
                 print(NODE[i].F1)
                 for I in range(NODE[i].NCHANL):
                     if NODE[i].F1[I] <= 0:
-                    #sys.exit("MASS was less than 0")
-                NODE[i].ERR[I] = abs((NODE[i].F1[I] - NODE[i].F11[I]) / NODE[i].F1[I])
+                        NODE[i].ERR[I] = abs((NODE[i].F1[I] - NODE[i].F11[I]) / NODE[i].F1[I])
                 print(NODE[i].F1)
                 ERRMAX = max(NODE[i].ERR)
                 print(NODE[i].F1)
