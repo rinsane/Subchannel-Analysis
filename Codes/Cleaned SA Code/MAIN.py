@@ -12,7 +12,6 @@ def main():
                 NODE[i].F1[I] = NODE[i].F0[I]
                 NODE[i].P0[I] = NODE[i].PIN
             print("FOR NODE ZERO (init) \n\n")
-                  
 
             for K in range(NODE[i].NK):
                 NODE[i].WIJ0[K] = NODE[i].WIJIN
@@ -99,8 +98,8 @@ def main():
                 print(NODE[i].F1)
                 for I in range(NODE[i].NCHANL):
                     if NODE[i].F1[I] <= 0:
-                        sys.exit("MASS was less than 0")
-                    NODE[i].ERR[I] = abs((NODE[i].F1[I] - NODE[i].F11[I]) / NODE[i].F1[I])
+                    #sys.exit("MASS was less than 0")
+                NODE[i].ERR[I] = abs((NODE[i].F1[I] - NODE[i].F11[I]) / NODE[i].F1[I])
                 print(NODE[i].F1)
                 ERRMAX = max(NODE[i].ERR)
                 print(NODE[i].F1)
