@@ -6,7 +6,7 @@ def main():
 
     NODE = [sub_routines() for _ in range(sub_routines().NNODE)]
 
-    for i in range(NODE[0].NNODE):
+    for i in range(NODE[0].NNODE):                                       ### CERTAIN CLARFICATION
 
         #For setting the boundary condition -- no error
         if i == 0:
@@ -74,10 +74,13 @@ def main():
         
         EMAX = max(NODE[i].ERROR)
 
-        while EMAX > 0.01:
+        while EMAX > 10E-8:
             NODE[i].AXIMOM()
+            for I in range(NODE[i].NCHANL):
+                NODE.P1[I] = (NODE[i].DELTA *NODE[i].P1[I]) + ((1 - NODE[i].DELTA) * NODE[i].P0[I])
             NODE[i].DCROSS()
-
+            for I in range(NODE[i].NCHANL):
+                NODE.WIJ1[I] = (NODE[i].GAMA *NODE[i].WIJ1[I]) + ((1 - NODE[i].GAMA) * NODE[i].WIJ0[I])
             for I in range(NODE[i].NCHANL):
                 NODE[i].F11[I] = NODE[i].F1[I]
             

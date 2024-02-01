@@ -64,7 +64,7 @@ class sub_routines(variables):
             SP3 = self.SLP * self.THETA * SUM3
             SP4 = self.SLP * (1 - self.THETA) * SUM4
 
-            self.WIJ1[K] = (SP1 - SP2 + SP3 + SP4) / self.D[K]
+            self.WIJ1[K] = (SP1 - SP2 + SP3 + SP4) / self.D[K]                         
 
         #print("END OF DCROSS")
 
@@ -205,9 +205,9 @@ class sub_routines(variables):
         for K in range(self.NK):
             for I in range(self.NCHANL):
                 self.S[K][I] = 0
-                if I == self.IC[K]:
+                if I == self.IC[K]-1:
                     self.S[K][I] = 1
-                if I == self.JC[K]:
+                if I == self.JC[K]-1:
                     self.S[K][I] = -1
 
         # Computation of transpose matrix ST

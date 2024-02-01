@@ -8,20 +8,20 @@ import numpy as np
 class variables:
 
    ALPHA   = 90 # (ANGLE )
-   AXLN    = 0.1
+   AXLN    = 0.8
    DELTA   = 0.5
-   FACK    = 0.1
-   FT      = 0.5 # turbulent factor used to compensate imperfect analogy bw turbulent transport of enthalpy and momentum
+   FACK    = 0.01
+   FT      = 0.1 # turbulent factor used to compensate imperfect analogy bw turbulent transport of enthalpy and momentum
    GAMA    = 0.5
 
    GC      = 9.81 # g
    NCHANL  = 14 # no of subchannel
    NK      = 19 # no of connections
-   NNODE   = 2
+   NNODE   = 4001
    RDIA    = 0.01308  
    RHO     = 817.4  
    SLP     = 0.5 
-   THETA   = 0.8 # IMPLICIT FAV
+   THETA   = 0.6 # IMPLICIT FAV
    VISC    = 0.000011
    DELX    = AXLN/(NNODE-1)
    GAP     = [.0018034,.0009,.0009,.0018034,.0018034,.0009,.0018034,.0009,.0018034,.004140000,.00414,.0018034,.000991,.0019558,.0019558,.000991,.00194,.00194,.00194]
@@ -65,7 +65,7 @@ class variables:
 
       #F0 -- initial mass flow rate for 14 subchannels, F1 --final mass flow rate for 14 subchannels, temp variable for copying F11 
       self.F0      = [.090576301,.090576301,.331301059,.1810780788,.331301059,.331301059,.27866318100,.39238281,.278663181,.331301059,.250849063,.501698126,.501698126,.25084906] 
-      self.F1      = [0] * 14  
+      self.F1      = [0] * variables.NCHANL  
       self.F11     = np.zeros(variables.NK)
       
         
@@ -91,7 +91,7 @@ class variables:
       self.Q       = np.zeros(variables.NCHANL)
       
       #Reynold number
-      self.RE      = [0] * 20 
+      self.RE      = [0] *variables.NK
       
       #S -- connecting matrix , calculated by SKI, ST -- transpose of S calculated by SKI
       #temp vars
@@ -100,7 +100,7 @@ class variables:
       #defn moved in XB --  self.SAVE    = np.zeros(variables.NK)
       self.SD      = np.zeros((variables.NK, variables.NK))
       self.SS      = np.zeros(variables.NCHANL)
-      self.ST      = [[0.0] * 20 for _ in range(20)]  
+      self.ST      = [[0.0] * variables.NK for _ in range(variables.NK)]  
 
       #USTAR0 -- initial velocity, USTAR1 -- final velocity, USTAR D1 -- temp VAR for USTD1 
       self.USTAR0  = [0.0] * variables.NK
