@@ -1,5 +1,5 @@
 import numpy as np
-from INPUTS import variables
+from inputs import variables
 import math
 
 
