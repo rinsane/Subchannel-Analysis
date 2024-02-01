@@ -8,7 +8,7 @@ import numpy as np
 class variables:
 
    ALPHA   = 90 # (ANGLE )
-   AXLN    = 0.8
+   AXLN    = 1.5
    DELTA   = 0.5
    FACK    = 0.01
    FT      = 0.1 # turbulent factor used to compensate imperfect analogy bw turbulent transport of enthalpy and momentum
@@ -17,11 +17,11 @@ class variables:
    GC      = 9.81 # g
    NCHANL  = 14 # no of subchannel
    NK      = 19 # no of connections
-   NNODE   = 4001
+   NNODE   = 18501
    RDIA    = 0.01308  
    RHO     = 817.4  
    SLP     = 0.5 
-   THETA   = 0.6 # IMPLICIT FAV
+   THETA   = 0.5 # IMPLICIT FAV
    VISC    = 0.000011
    DELX    = AXLN/(NNODE-1)
    GAP     = [.0018034,.0009,.0009,.0018034,.0018034,.0009,.0018034,.0009,.0018034,.004140000,.00414,.0018034,.000991,.0019558,.0019558,.000991,.00194,.00194,.00194]
