@@ -13,14 +13,14 @@ def main():
             for I in range(NODE[i].NCHANL):
                 NODE[i].F1[I] = NODE[i].F0[I]
                 NODE[i].P0[I] = NODE[i].PIN
-            print("FOR NODE ZERO (init) \n\n")
+            print("FOR NODE ZERO (init)\n")
 
             for K in range(NODE[i].NK):
                 NODE[i].WIJ0[K] = NODE[i].WIJIN
                 NODE[i].WIJ1[K] = NODE[i].WIJIN
         
         else:
-            print(f"\n\nFOR NODE {i}: \n\n")
+            
             NODE[i].P0 = NODE[i-1].P1.copy()
 
             NODE[i].F0 = NODE[i-1].F1.copy()
@@ -65,7 +65,7 @@ def main():
                 '''print(tabulate([[NODE[i].P1[I], NODE[i].F1[I]] for I in range(14)], headers=['P1', 'F1'], tablefmt = 'grid'))
                 print(tabulate([[NODE[i].WIJ1[I]] for I in range(19)], headers=['WIJ1'], tablefmt = 'grid'))'''
                 sys.exit()
-        print("All checks passes for P1 and F1 and WIj1, values are listed below")
+        #print("All checks passes for P1 and F1 and WIj1, values are listed below")
         '''print(tabulate([[NODE[i].P1[I], NODE[i].F1[I]] for I in range(14)], headers=['P1', 'F1'], tablefmt = 'grid'))
         print(tabulate([[NODE[i].WIJ1[I]] for I in range(19)], headers=['WIJ1'], tablefmt = 'grid'))'''
         for I in range(NODE[i].NCHANL):
@@ -92,10 +92,12 @@ def main():
 
         NODE[i].HM()
 
-        print(f"Pressure {i}: {NODE[i].P1}\n")
-        print(f"Enthalpy {i}: {NODE[i].H1}\n")
-        print(f"WIJ{i}      : {NODE[i].WIJ1}\n")
-        print(f"MassFlow {i}: {NODE[i].F1}")
+        if i%1000 == 0:
+            print(f"FOR NODE {i}:\n")
+            print(f"Pressure {i}: {NODE[i].P1}\n")
+            print(f"Enthalpy {i}: {NODE[i].H1}\n")
+            print(f"WIJ{i}      : {NODE[i].WIJ1}\n")
+            print(f"MassFlow {i}: {NODE[i].F1}")
 
 if __name__ == '__main__':
     main()
