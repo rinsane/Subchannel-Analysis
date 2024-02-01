@@ -8,7 +8,7 @@ import numpy as np
 class variables:
 
    ALPHA   = 90 # (ANGLE )
-   AXLN    = 1.475
+   AXLN    = 1.5
    DELTA   = 0.5
    FACK    = 0.01
    FT      = 0.1 # turbulent factor used to compensate imperfect analogy bw turbulent transport of enthalpy and momentum
@@ -17,7 +17,7 @@ class variables:
    GC      = 9.81 # g
    NCHANL  = 14 # no of subchannel
    NK      = 19 # no of connections
-   NNODE   = 18501
+   NNODE   = 27001
    RDIA    = 0.01308  
    RHO     = 817.4  
    SLP     = 0.5 
