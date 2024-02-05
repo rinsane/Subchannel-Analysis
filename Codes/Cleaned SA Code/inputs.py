@@ -8,7 +8,7 @@ import numpy as np
 class variables:
 
    ALPHA   = 90 # (ANGLE )
-   AXLN    = 3
+   AXLN    = 1.5
    DELTA   = 0.5
    FACK    = 0.01
    FT      = 0.1 # turbulent factor used to compensate imperfect analogy bw turbulent transport of enthalpy and momentum
@@ -17,7 +17,7 @@ class variables:
    GC      = 9.81 # g
    NCHANL  = 14 # no of subchannel
    NK      = 19 # no of connections
-   NNODE   = 350001
+   NNODE   = 27001
    RDIA    = 0.01308  
    RHO     = 817.4  
    SLP     = 0.5 
@@ -27,7 +27,7 @@ class variables:
    GAP     = [.0018034,.0009,.0009,.0018034,.0018034,.0009,.0018034,.0009,.0018034,.004140000,.00414,.0018034,.000991,.0019558,.0019558,.000991,.00194,.00194,.00194]
    #Hydraulic Diameter
    HDIA    = [.0056277,.0056277,.0084154,.005627,.0084154,.0084154,.0074985,.0094202,.0074485,.0084154,.0070309,.0070309,.0070309,.0070309]
-   #Heat Generation per unit volume
+   #Heat Generation per unit volume  might be kw/m^2
    HF      = [607.59,607.59,607.59,607.59,607.59,607.59,607.59,607.59,607.59,607.59,607.59,607.59,607.59,607.59]
    #Heated Perimeter
    HPERI   = [.010272,.010272,.020546,.020546,.020546,.020546,.020546,.020546,.020546,.020546,.020371,.040742,.040742,.020371]

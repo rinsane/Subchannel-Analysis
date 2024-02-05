@@ -1,10 +1,17 @@
 from FUNCTIONS import sub_routines
 import sys
 from tabulate import tabulate
+import matplotlib.pyplot as plt
+import numpy as np
 
 def main():
 
     NODE = [sub_routines() for _ in range(sub_routines().NNODE)]
+
+    Axial_length = [NODE[0].DELX*i for i in range(NODE[0].NNODE)]
+    Enthalpy = [[] for _ in range(NODE[0].NCHANL)]      # H1
+    MassFlowRate = [[] for _ in range(NODE[0].NCHANL)]  # F1
+    Pressure = [[] for _ in range(NODE[0].NCHANL)]      # P1
 
     for i in range(NODE[0].NNODE):                                       ### CERTAIN CLARFICATION
 
@@ -97,6 +104,41 @@ def main():
             print(f"Enthalpy {i}: {NODE[i].H1}\n")
             print(f"WIJ{i}      : {NODE[i].WIJ1}\n")
             print(f"MassFlow {i}: {NODE[i].F1}")
+
+        for chan in range(NODE[0].NCHANL):
+            Enthalpy[chan].append(NODE[i].H1[chan])
+            MassFlowRate[chan].append(NODE[i].F1[chan])
+            Pressure[chan].append(NODE[i].P1[chan])
+
+    for i in range(NODE[0].NCHANL):
+        # Create a new figure for each subplot
+        plt.figure()
+        
+        # Plot Pressure
+        plt.subplot(1, 3, 1)
+        plt.plot(Axial_length, Pressure[i], label="Pressure")
+        plt.title(f"NODE {i}")
+        plt.legend()
+
+        # Plot Enthalpy
+        plt.subplot(1, 3, 2)
+        plt.plot(Axial_length, Enthalpy[i], label="Enthalpy")
+        plt.title(f"NODE {i}")
+        plt.legend()
+
+        # Plot MassFlowRate
+        plt.subplot(1, 3, 3)
+        plt.plot(Axial_length, MassFlowRate[i], label="MassFlowRate")
+        plt.title(f"NODE {i}")
+        plt.legend()
+        mng = plt.get_current_fig_manager()
+        mng.window.state('zoomed')
+        plt.tight_layout()
+   
+    
+    plt.show()
+
+
 
 if __name__ == '__main__':
     main()
