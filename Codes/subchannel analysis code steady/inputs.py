@@ -4,7 +4,7 @@ NNODE=97
 NK = 19                         ######### no of connections
 NCHANL = 14                             ### no of subchannel
 SLP=0.5                                
-FACK=0.5
+FACK=0.01
 VISC=0.000011
 GC=9.81                            ##   accelaeration due to gravity
 
@@ -102,16 +102,16 @@ NODE=1
 WIJIN=0.0
 PIN=12262500
 print(PIN)
-if X==0:
-    for I in range(NCHANL):
-       F1[I]=F0[I]                                ##############   WHY THIS BC IS NOT UPDATING
-       P0[I]=PIN
+# if X==0:
+#     for I in range(NCHANL):
+#        F1[I]=F0[I]                                ##############   WHY THIS BC IS NOT UPDATING
+#        P0[I]=PIN
     
-    for K in range(NK):
-       WIJ0[K]=WIJIN
-       WIJ1[K]=WIJIN
+#     for K in range(NK):
+#        WIJ0[K]=WIJIN
+#        WIJ1[K]=WIJIN
 
 
-DELX=AXLN/(NNODE-1)
-print(DELX)
-print(SLP)
+# DELX=AXLN/(NNODE-1)
+# print(DELX)
+# print(SLP)

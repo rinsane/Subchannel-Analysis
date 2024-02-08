@@ -63,7 +63,7 @@ def wprim():
 
     print('END OF SUB-WPRIM')
 
-wprim()
+#wprim()
 # Call the subroutine
 
 

@@ -33,5 +33,5 @@ def XB():
     # Print the results
     for I in range(0, NCHANL):
         print(f"B1[{I}] = {B1[I ]}, B2[{I}] = {B2[I]}, B[{I}] = {B[I]}")
-XB()
+#XB()
 

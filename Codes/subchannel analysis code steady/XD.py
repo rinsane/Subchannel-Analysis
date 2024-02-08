@@ -29,4 +29,4 @@ def XD():
     for K in range(NK):
         print(f'CIJ0[{K}] = {CIJ0[K]}, CIJ1[{K}] = {CIJ1[K]}, D[{K}] = {D[K]}, USTD1[{K}] = {USTD1[K]}')
 
-XD()
+#XD()

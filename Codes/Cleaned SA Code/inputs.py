@@ -100,7 +100,7 @@ class variables:
       #defn moved in XB --  self.SAVE    = np.zeros(variables.NK)
       self.SD      = np.zeros((variables.NK, variables.NK))
       self.SS      = np.zeros(variables.NCHANL)
-      self.ST      = [[0.0] * 20 for _ in range(20)]  
+      self.ST      = [[0.0] * variables.NK for _ in range(variables.NK)]  
 
       #USTAR0 -- initial velocity, USTAR1 -- final velocity, USTAR D1 -- temp VAR for USTD1 
       self.USTAR0  = [0.0] * variables.NK

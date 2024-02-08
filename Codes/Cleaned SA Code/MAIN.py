@@ -1,13 +1,43 @@
 from FUNCTIONS import sub_routines
 import sys
 from tabulate import tabulate
+import numpy as np
+#Temporary matrix multiplication function for use
+def matrix_multiply(A, B):
+    # Check if the number of columns in A is equal to the number of rows in B
+    if len(A[0]) != len(B):
+        raise ValueError("Number of columns in A must be equal to the number of rows in B")
 
+    # Initialize the result matrix with zeros
+    result = [[0 for _ in range(len(B[0]))] for _ in range(len(A))]
+
+    # Perform matrix multiplication using nested loops
+    for i in range(len(A)):
+        for j in range(len(B[0])):
+            for k in range(len(B)):
+                result[i][j] += A[i][k] * B[k][j]
+
+    return result
+#Temporary function
+def check_zero_sums(matrix):
+    """
+    Check if the sum of elements in every row and every column is zero.
+
+    Parameters:
+    - matrix: Input matrix (2D list or NumPy array)
+
+    Returns:
+    - True if the sums are zero, False otherwise
+    """
+    row_sums = np.sum(matrix, axis=1)
+    col_sums = np.sum(matrix, axis=0)
+
+    return all(row_sum == 0 for row_sum in row_sums) and all(col_sum == 0 for col_sum in col_sums)
 def main():
 
     NODE = [sub_routines() for _ in range(sub_routines().NNODE)]
 
     for i in range(NODE[0].NNODE):
-
         #For setting the boundary condition -- no error
         if i == 0:
             for I in range(NODE[i].NCHANL):
@@ -18,7 +48,6 @@ def main():
             for K in range(NODE[i].NK):
                 NODE[i].WIJ0[K] = NODE[i].WIJIN
                 NODE[i].WIJ1[K] = NODE[i].WIJIN
-        
         else:
             print(f"\n\nFOR NODE {i}: \n\n")
             NODE[i].P0 = NODE[i-1].P1.copy()
@@ -33,6 +62,37 @@ def main():
         '''/////////////////////////////////////////////////'''
         #CALLING THE SKI    
         NODE[i].SKI()
+        print("Connecting matrix")
+        print(tabulate(NODE[i].S, tablefmt="fancy_grid"))
+        check = True
+        for a in range(NODE[i].NK):
+            count  =0
+            for b in range(NODE[i].NCHANL):
+                if NODE[i].S[a][b] != 0:
+                    count+=1
+            if count != 2:
+                check = False
+        for a in range(NODE[i].NCHANL):
+            count  =0
+            for b in range(NODE[i].NK):
+                if NODE[i].S[a][b] != 0:
+                    count+=1
+            if count != 2:
+                check = False
+        print("Test currently not working correctly please ignore below 2 messages")
+        print("Check for connecting matrix: To see if each and and each column has exactly 2 non-zero values")
+        if check == True:
+            print("YES")
+        else:
+            print("NO")
+        
+        Product = matrix_multiply(NODE[i].ST,NODE[i].S)
+        print(tabulate(Product, tablefmt="fancy_grid"))
+        if check_zero_sums(Product):
+            print("YES")
+        else:
+            print("NO")
+
         NODE[i].XD()
         NODE[i].XB()
         NODE[i].gauss()

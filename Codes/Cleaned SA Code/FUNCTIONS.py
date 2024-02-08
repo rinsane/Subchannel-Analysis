@@ -3,6 +3,7 @@ from INPUTS import variables
 import math
 
 
+
 class sub_routines(variables):
 
     def AXIMOM(self):
@@ -205,11 +206,10 @@ class sub_routines(variables):
         for K in range(self.NK):
             for I in range(self.NCHANL):
                 self.S[K][I] = 0
-                if I == self.IC[K]:
+                if I == self.IC[K]-1:
                     self.S[K][I] = 1
-                if I == self.JC[K]:
+                if I == self.JC[K]-1:
                     self.S[K][I] = -1
-
         # Computation of transpose matrix ST
         for I in range(self.NCHANL):
             for K in range(self.NK):

@@ -14,6 +14,7 @@ from DCROSS import*
 from MASFLOW import*
 from AXIMOM import*
 import time
+import sys
 start = time.time()
 
 
@@ -32,7 +33,7 @@ for i in range(NNODE):
         YMULT(XMLT,S,XM,NCHANL,NK,NCHANL)
         for I in range(NCHANL):
             for J in range(NCHANL):
-                XM[I,J]=DELX*SLP*XM[I,J]/A[I]
+                XM[I,J]=DELX*SLP*XM[I,J]/(A[I]*D[I])
                 #print(XM)
         for II in range(NCHANL):
             for JJ in range(NCHANL):
@@ -61,6 +62,21 @@ for i in range(NNODE):
         for I in range(NCHANL):
             F11[I]=F1[I]
         MASFLO()
+        for I in range(NCHANL):
+            if(P1[I] < 0 ):
+                print("Negative pressure in P1 at node {i}")
+                print(P1)
+                sys.exit()
+        #Check for F1
+        for I in range(NODE[i].NCHANL):
+            if(NODE[i].F1[I] < 0 ):
+                print("Negative massflow rate in F1 at node {i}")
+                print(F1)
+                sys.exit()
+        print("All checks passes for P1 and F1 and WIj1, values are listed below")
+        print(P1)
+        print(F1)
+        sys.exit()
         for I in range(NCHANL):
             ERROR[I]=abs((F11[I]-F1[I])/F1[I])
         if ERROR[I]>=0.01:                                              ## CHECK ALIGNMENT HERE
