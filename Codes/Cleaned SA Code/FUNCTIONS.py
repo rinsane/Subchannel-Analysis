@@ -1,5 +1,5 @@
 import numpy as np
-from INPUTS import variables
+from inputs import variables
 import math
 
 
@@ -65,7 +65,7 @@ class sub_routines(variables):
             SP3 = self.SLP * self.THETA * SUM3
             SP4 = self.SLP * (1 - self.THETA) * SUM4
 
-            self.WIJ1[K] = (SP1 - SP2 + SP3 + SP4) / self.D[K]
+            self.WIJ1[K] = (SP1 - SP2 + SP3 + SP4) / self.D[K]                         
 
         #print("END OF DCROSS")
 

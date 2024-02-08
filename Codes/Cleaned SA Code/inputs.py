@@ -10,24 +10,24 @@ class variables:
    ALPHA   = 90 # (ANGLE )
    AXLN    = 0.1
    DELTA   = 0.5
-   FACK    = 0.1
-   FT      = 0.5 # turbulent factor used to compensate imperfect analogy bw turbulent transport of enthalpy and momentum
+   FACK    = 0.01
+   FT      = 0.1 # turbulent factor used to compensate imperfect analogy bw turbulent transport of enthalpy and momentum
    GAMA    = 0.5
 
    GC      = 9.81 # g
    NCHANL  = 14 # no of subchannel
    NK      = 19 # no of connections
-   NNODE   = 2
+   NNODE   = 500
    RDIA    = 0.01308  
    RHO     = 817.4  
    SLP     = 0.5 
-   THETA   = 0.8 # IMPLICIT FAV
+   THETA   = 0.5 # IMPLICIT FAV
    VISC    = 0.000011
    DELX    = AXLN/(NNODE-1)
    GAP     = [.0018034,.0009,.0009,.0018034,.0018034,.0009,.0018034,.0009,.0018034,.004140000,.00414,.0018034,.000991,.0019558,.0019558,.000991,.00194,.00194,.00194]
    #Hydraulic Diameter
    HDIA    = [.0056277,.0056277,.0084154,.005627,.0084154,.0084154,.0074985,.0094202,.0074485,.0084154,.0070309,.0070309,.0070309,.0070309]
-   #Heat Generation per unit volume
+   #Heat Generation per unit volume  might be kw/m^2
    HF      = [607.59,607.59,607.59,607.59,607.59,607.59,607.59,607.59,607.59,607.59,607.59,607.59,607.59,607.59]
    #Heated Perimeter
    HPERI   = [.010272,.010272,.020546,.020546,.020546,.020546,.020546,.020546,.020546,.020546,.020371,.040742,.040742,.020371]
@@ -65,7 +65,7 @@ class variables:
 
       #F0 -- initial mass flow rate for 14 subchannels, F1 --final mass flow rate for 14 subchannels, temp variable for copying F11 
       self.F0      = [.090576301,.090576301,.331301059,.1810780788,.331301059,.331301059,.27866318100,.39238281,.278663181,.331301059,.250849063,.501698126,.501698126,.25084906] 
-      self.F1      = [0] * 14  
+      self.F1      = [0] * variables.NCHANL  
       self.F11     = np.zeros(variables.NK)
       
         
@@ -91,7 +91,7 @@ class variables:
       self.Q       = np.zeros(variables.NCHANL)
       
       #Reynold number
-      self.RE      = [0] * 20 
+      self.RE      = [0] *variables.NK
       
       #S -- connecting matrix , calculated by SKI, ST -- transpose of S calculated by SKI
       #temp vars
