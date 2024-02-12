@@ -286,7 +286,7 @@ class one_for_all:
 
         col_names=["T","r"]
         data=[]
-        for i in range(0,NF+NC):
+        for i in range(0,self.NF+self.NC):
             data.append([self.T[i],self.r[i]])
     
         print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))  
