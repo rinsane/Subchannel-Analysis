@@ -11,7 +11,7 @@ def main():
     data=[]
     for i in range(0,solver.NF+solver.NC):
         data.append([solver.r[i],solver.rw[i],solver.re[i],solver.drw[i],solver.dre[i]])
-        
+
     print(tabulate(data, headers=col_names, tablefmt="fancy_grid", showindex="always"))
 
     # coefficient maker
