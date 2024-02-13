@@ -1,45 +1,43 @@
 class DATA:
     def __init__(self):
-        self.AE     = []
-        self.Ai     = []
-        self.AQ     = []
-        self.AW_ex  = []
-        self.AW     = []
-
-        self.Bi     = []
-         
-        self.CAE    = []
-        self.CAP    = []
-        self.CAQ    = []
-        self.CAW    = []
+        self.AE     = []    # (Re*Ke) / (Re - Rp)
+        self.CAE    = []    # Ψ * AE
+        self.AW     = []    # (Rw*Kw) / (Rp - Rw)
+        self.CAW    = []    # Ψ * AW
+        self.AQ     = []    # Q taking conductance in considerations
+        self.CAQ    = []    # Ψ * AQ
         
-        self.dre    = []
-        self.drw    = []
+        self.CAP    = []    # CAE + CAW + Transient Term (= 0)
+
+        self.Ai     = []    # 
+        self.Bi     = []    # 
+        self.re     = []    # (ri + r(i+1))/2
+        self.rw     = []    # (r(i-1) + ri)/2
+        
+        self.dre    = []    # delta Re
+        self.drw    = []    # delta Rw
         
         self.R1     = 0.012
         self.R2     = 0.015
         self.GT     = self.R2 - self.R1
         
-        self.HTC    = 7800
-        self.HTCC   = 3840
+        self.HTC    = 7800  # Heat Transfer Coefficient (fuel - gap - clad)
+        self.HTCC   = 3840  # Heat Transfer Coefficient (clad - coolant)
         
         self.kf     = 2.5   # thermal conduvtivity of fuel rod
         
-        self.NG     = 1     # ALWAYS TAKE 1 NODE TO SOLVE FOR GAP THAT IS IT IS AT INTERSECTION BETWEEN FUEL AND CLAD  
-        self.NC     = 8                                   
-        self.NF     = 13
-        self.NT     = self.NF + self.NC
+        self.NG     = 1     # ALWAYS TAKE 1 NODE TO SOLVE FOR GAP THAT IS AT INTERSECTION BETWEEN FUEL AND CLAD  
+        self.NC     = 8     # Number of domanins in cladding
+        self.NF     = 13    # Number of domains in fuel rods
+        self.NT     = self.NF + self.NC # Total number of domains.
          
-        self.Q      = 10e6
         self.qflux  = 0
         
         self.r      = []
         self.R3     = 0.021
-        self.re     = []
-        self.rw     = []
         
         self.S      = []
-        self.shi    = 1
+        self.shi    = 1     # implicit factor
         
         self.T      = [0 for i in range(self.NF + self.NC)]
         print(self.T)

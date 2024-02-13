@@ -2,6 +2,7 @@ from functions import FUNCTIONS
 from tabulate import tabulate
 import matplotlib.pyplot as plt
 
+# calculations are being carried out from the Clad Surface to the Centreline of the Fuel Rod
 def main():
     solver = FUNCTIONS()
 
