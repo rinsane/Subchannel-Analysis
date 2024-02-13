@@ -47,10 +47,8 @@ for i in range(0,NF+NC):
         AQ_exp=0
     AQ.append(AQ_exp)
     #print(AQ_exp)
-    
+
 #CAQ
-   
-#CAE
 for i in range(0,NF+NC):
     CAQ_exp=shi*AQ[i]
     CAQ.append(CAQ_exp)

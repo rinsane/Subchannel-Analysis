@@ -144,7 +144,7 @@ class FUNCTIONS(DATA):
                 Bi_exp = self.S[i] / self.CAP[i]
                 self.Ai.append(Ai_exp)
                 self.Bi.append(Bi_exp)
-            elif i == self.NT - 1:
+            elif i == self.NT:
                 Ai_exp = self.CAW[i] / self.CAP[i]
                 Bi_exp = self.S[i] / self.CAP[i]
                 self.Ai.append(Ai_exp)
