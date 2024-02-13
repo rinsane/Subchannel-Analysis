@@ -34,8 +34,8 @@ class one_for_all:
         
         self.kf=2.5                                        ### thermal conduvtivity of fuel rod
         
-        self.NF=13
-        self.NC=8                                        ##### SOME PROBLEM LIES WITH NC
+        self.NF=23
+        self.NC=15                                        ##### SOME PROBLEM LIES WITH NC
         self.NG=1                                        ### ALWAYS TAKE 1 NODE TO SOLVE FOR GAP THAT IS IT IS AT INTERSECTION BETWEEN FUEL AND CLAD  
         self.NT=self.NF+self.NC
         
