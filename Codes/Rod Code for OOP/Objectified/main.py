@@ -50,7 +50,7 @@ def main():
     data=[]
     for i in range(0,solver.NF+solver.NC):
         data.append([solver.T[i],solver.r[i]])
-        
+
     print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
 
     # plotting of data
