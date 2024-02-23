@@ -1,4 +1,4 @@
-from coeff import*
+from inputs import*
 import numpy as np
 from tabulate import tabulate
 import matplotlib.pyplot as plt
