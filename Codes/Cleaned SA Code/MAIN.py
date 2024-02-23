@@ -1,19 +1,16 @@
 from FUNCTIONS import sub_routines
 import sys
 from tabulate import tabulate
-<<<<<<< HEAD
+import matplotlib.pyplot as plt
 import numpy as np
+import csv
+import os
+
 #Temporary matrix multiplication function for use
 def matrix_multiply(A, B):
     # Check if the number of columns in A is equal to the number of rows in B
     if len(A[0]) != len(B):
         raise ValueError("Number of columns in A must be equal to the number of rows in B")
-=======
-import matplotlib.pyplot as plt
-import numpy as np
-import csv
-import os
->>>>>>> refs/remotes/origin/main
 
     # Initialize the result matrix with zeros
     result = [[0 for _ in range(len(B[0]))] for _ in range(len(A))]
@@ -44,9 +41,6 @@ def main():
 
     NODE = [sub_routines() for _ in range(sub_routines().NNODE)]
 
-<<<<<<< HEAD
-    for i in range(NODE[0].NNODE):
-=======
     Axial_length = [NODE[0].DELX*i for i in range(NODE[0].NNODE)]
     Enthalpy = [[] for _ in range(NODE[0].NCHANL)]      # H1
     MassFlowRate = [[] for _ in range(NODE[0].NCHANL)]  # F1
@@ -55,7 +49,6 @@ def main():
 
     for i in range(NODE[0].NNODE):                                       ### CERTAIN CLARFICATION
 
->>>>>>> refs/remotes/origin/main
         #For setting the boundary condition -- no error
         if i == 0:
             for I in range(NODE[i].NCHANL):

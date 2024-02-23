@@ -172,9 +172,9 @@ class one_for_all:
             self.AQ.append(AQ_exp)
             #print(AQ_exp)
     
-        #//!CAQ == where?
+        
    
-        #CAE
+        #CAQ
         for i in range(0,self.NF+self.NC):
             CAQ_exp=self.shi*self.AQ[i]
             self.CAQ.append(CAQ_exp)
