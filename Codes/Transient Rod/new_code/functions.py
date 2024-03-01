@@ -1,81 +1,29 @@
+from data import*
 import numpy as np
 from tabulate import tabulate
-import matplotlib.pyplot as plt
-class one_for_all:
-    def __init__(self):
-        
-        self.AE=[]
-        self.Ai=[]
-        self.AQ=[]
-        self.AW=[]
-        self.AW_ex=[]
-        
-        self.Bi=[]
-        
-        self.CAE=[]
-        self.CAP=[]
-        self.CAQ=[]
-        self.CAW=[]
-        
-        self.dre=[]
-        self.drw=[]
-        
-        self.R1=0.012
-        self.R2=0.015
-        self.R3=0.021
-        self.r=[]
-        self.rw=[]
-        self.re=[]
-        
-        self.GT = self.R2-self.R1
-        
-        self.HTC=7800
-        self.HTCC=3840
-        
-        self.kf=2.5                                        ### thermal conduvtivity of fuel rod
-        
-        self.NF=23
-        self.NC=15                                        ##### SOME PROBLEM LIES WITH NC
-        self.NG=1                                        ### ALWAYS TAKE 1 NODE TO SOLVE FOR GAP THAT IS IT IS AT INTERSECTION BETWEEN FUEL AND CLAD  
-        self.NT=self.NF+self.NC
-        
-        self.Q=10e6
-        
-        
-        
-        self.S=[]
-        self.shi=1
-        
-        self.Tinf=400
-        self.T=[0 for i in range(0,self.NF+self.NC)]
-       
-        self.qflux=0 
-    
+
+class func(Variables):
     def grid(self):
-        #Code for Grid is running
-        drf=self.R1/(self.NF-1)
-        drc=(self.R3-self.R1-self.GT)/(self.NC-1)
+        self.drf=self.R1/(self.NF-1)
+        self.drc=(self.R3-self.R1-self.GT)/(self.NC-1)
         ### if r is fine the grid gen is automatically fine
-        ##r
+
+        #r
         for i in range(0,self.NF+self.NC):
             if(i==0):
                 r_n=0
             elif(i<=self.NF-2):
-                r_n=r_o+drf
-            elif(i<=self.NF-1):
+                r_n=r_o+self.drf
+            elif(i<self.NF):
                 r_n=self.R1
             elif(i==self.NF):
-                r_n=self.R1+self.GT
+             r_n=self.R1+self.GT
             elif(i<=self.NF+self.NC-2):
-                r_n=self.R1+drc*(i-(self.NF))+self.GT
+                r_n=self.R1+self.GT+self.drc*(i-(self.NF))
             else:
                 r_n=self.R3
             self.r.append(r_n)
-            r_o=r_n                                                             #SOME PROBLEM LIES WITH NC JUST IDENTIFY NOT GIVING GOOD RESULTS
-            #print(r_n)
-            #some issue with last node
-            if round(r_n) == self.R3:
-                break
+            r_o=r_n 
     
         #rw 
         for i in range(0,self.NF+self.NC):
@@ -97,7 +45,7 @@ class one_for_all:
             else:
                 re_n=self.R3
             self.re.append(re_n)
-        #print(re_n)
+            #print(re_n)
     
         #drw
         for i in range(0,self.NF+self.NC):
@@ -113,96 +61,119 @@ class one_for_all:
             if(i<=self.NF+self.NC-2):
                 dre_n=self.r[i+1]-self.r[i]
             else:
-                dre_n=0                                                    
-            #can be 
+                dre_n=0
             self.dre.append(dre_n)
             #print(dre)
-        #?print below
-        
+    
+        '''
         col_names=["r","rw","re","drw","dre"]
         data=[]
         for i in range(0,self.NF+self.NC):
             data.append([self.r[i],self.rw[i],self.re[i],self.drw[i],self.dre[i]])
     
         print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
+        '''    
+
+    def coeff_T(self):
+        self.AE.clear()
+        self.AW.clear()
+        self.AT.clear()
+        self.ATO.clear()
+        self.AQ.clear()
+        self.CAW.clear()
+        self.CAE.clear()
+        self.CAQ.clear()
+        self.CAP.clear()
+        self.S.clear()
     
-    def coefff(self):
+    
         #AW
         for i in range(0,self.NF+self.NC):
             if(i==0):
                 AW_ex=0
             else:
-                AW_ex=self.rw[i]*self.kf/self.drw[i]
+                AW_ex=self.rw[i]*self.kf[i]/self.drw[i]
             self.AW.append(AW_ex)
-            #print("AW",AW_ex)
-    
-    
+        #print("AW",AW_ex)
+        
+        
         #CAW
         for i in range(0,self.NF+self.NC):
             CAW_exp=self.shi*self.AW[i]
             self.CAW.append(CAW_exp)
-            #print(CAW_exp)
-    
+           #print(CAW_exp)
+        
         #AE
         for i in range(0,self.NF+self.NC):
             if(i<=self.NF+self.NC-2):
-                AE_exp=self.re[i]*self.kf/self.dre[i]
+                AE_exp=self.re[i]*self.kf[i]/self.dre[i]
             else:
                 AE_exp=0
             self.AE.append(AE_exp)
             #print(AE_ex)
-    
-    
+        
+        
         #CAE
         for i in range(0,self.NF+self.NC):
             CAE_exp=self.shi*self.AE[i]
             self.CAE.append(CAE_exp)
             #print(CAE_exp)
-    
+        
         #AQ
         for i in range(0,self.NF+self.NC):
-            if(i<self.NF):
-                self.Q=10000000
-            else:
-                self.Q=0
             if(i<=self.NF+self.NC):
-                AQ_exp=0.5*((self.re[i]*self.re[i]-self.rw[i]*self.rw[i])*self.Q) 
+                AQ_exp=0.5*((self.re[i]*self.re[i]-self.rw[i]*self.rw[i])*self.Q[i]) 
             else:
                 AQ_exp=0
             self.AQ.append(AQ_exp)
-            #print(AQ_exp)
-    
+        #print(AQ_exp)
         
-   
         #CAQ
+       
+
         for i in range(0,self.NF+self.NC):
             CAQ_exp=self.shi*self.AQ[i]
             self.CAQ.append(CAQ_exp)
             #print(CAQ_exp)
 
+
+        #AT
+        for i in range(0,self.NF+self.NC):
+            AT_exp=(self.Rho[i]*self.C[i])*((self.re[i]**2)-(self.rw[i]**2))/(2*self.Dt)
+            self.AT.append(AT_exp)
+            # print("AT: ",AT)
+        
+        
+        #ATO
+        for i in  range(0,self.NF+self.NC):
+            ATO_exp=(self.Rho_O[i]*self.C_O[i])*((self.re[i]**2)-(self.rw[i]**2))/(2*self.Dt)
+            self.ATO.append(ATO_exp)
+            #print("ATO",ATO)
+        
         #S
         for i in range(0,self.NF+self.NC):
-            S_exp=self.CAQ[i]
+            S_exp=self.CAQ[i]+self.ATO[i]*self.T_OLD[i]
             self.S.append(S_exp)
             #print(S_exp)
-        
+            
         #CAP
         for i in range(0,self.NF+self.NC):
             if(i<=self.NF+self.NC-1):
-                CAP_exp=self.CAE[i]+self.CAW[i]
+                CAP_exp=self.CAE[i]+self.CAW[i]+self.AT[i]
             elif(i==self.NF+self.NC-1):
-                CAP_exp=self.CAW[i]
+                CAP_exp=self.CAW[i]+self.AT[i]
             self.CAP.append(CAP_exp)
             #print(CAP_exp)
 
-        
-        col_names=["CAW","CAE","CAP","S","AQ"]
+        '''
+        col_names=["CAW","CAE","CAP","S","AQ","AT","ATO"]
         data=[]
         for i in range(0,self.NF+self.NC):
-            data.append([self.CAW[i],self.CAE[i],self.CAP[i],self.S[i],self.AQ[i]])
-    
+            data.append([self.CAW[i],self.CAE[i],self.CAP[i],self.S[i],self.AQ[i],self.AT[i],self.ATO[i]])
+        
         print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
-    
+        '''
+
     def bc(self):
         ####Nuemann Left Boundary    at centerline
         self.CAW[0] = 0
@@ -226,67 +197,45 @@ class one_for_all:
         self.CAP[self.NF+self.NC-1] = self.CAP[self.NF+self.NC-1] + self.shi*self.r[self.NF+self.NC-1]*self.HTCC
         self.S[self.NF+self.NC-1] = self.S[self.NF+self.NC-1] + (self.shi*self.r[self.NF+self.NC-1]*self.HTCC*self.Tinf)
 
-        #?print
-        
-        col_names=["CAW","CAE","CAP","S","AQ"]
+        '''
+        col_names=["CAW","CAE","CAP","S","AQ","AT","ATO"]
         data=[]
         for i in range(0,self.NF+self.NC):
-            data.append([self.CAW[i],self.CAE[i],self.CAP[i],self.S[i],self.AQ[i]])
+            data.append([self.CAW[i],self.CAE[i],self.CAP[i],self.S[i],self.AQ[i],self.AT[i],self.ATO[i]])
     
-        print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always")) 
-    
-    def TDMA_ST(self):
+        print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
+        '''
+
+    def TDMA(self):
         for i in range(0,self.NT):
             if(i==0):
-                Ai_exp=self.CAE[i]/self.CAP[i]
-                Bi_exp=self.S[i]/self.CAP[i]
-                self.Ai.append(Ai_exp)
-                self.Bi.append(Bi_exp)
-
-            elif(i==self.NT):
-                Ai_exp=self.CAW[i]/self.CAP[i]
-                Bi_exp=self.S[i]/self.CAP[i]
-                self.Ai.append(Ai_exp)
-                self.Bi.append(Bi_exp)
-
-
+                    Ai_exp=self.CAE[i]/self.CAP[i]
+                    Bi_exp=self.S[i]/self.CAP[i]
+                    self.Ai.append(Ai_exp)
+                    self.Bi.append(Bi_exp)
             else:
-                Ai_exp=self.CAE[i]/(self.CAP[i]-(self.CAW[i]*self.Ai[i-1]))
-                Bi_exp=(self.S[i]+(self.CAW[i]*(self.Bi[i-1])))/(self.CAP[i]-(self.CAW[i]*self.Ai[i-1]))
-                self.Ai.append(Ai_exp)
-                self.Bi.append(Bi_exp)
+                    Ai_exp=self.CAE[i]/(self.CAP[i]-(self.CAW[i]*self.Ai[i-1]))
+                    Bi_exp=(self.S[i]+(self.CAW[i]*(self.Bi[i-1])))/(self.CAP[i]-(self.CAW[i]*self.Ai[i-1]))
+                    self.Ai.append(Ai_exp)
+                    self.Bi.append(Bi_exp)
+            
+        # print("Ai: ",self.Ai)
+        # print("Bi: ",self.Bi)
+    
+        self.T_OLD[self.NT-1]=self.Bi[self.NT-1]
+        for i in range(self.NT-2,-1,-1):
+            T_to=(self.Ai[i]*self.T_OLD[i+1])+(self.Bi[i])
+            self.T_OLD[i]=T_to  
+        # T[0]=T[1]       
+                                              ############## CENTERLINE BC ISSUE RESOLVED
+        # print("T: ",self.T_OLD)
         
-        col_names=["Ai","Bi"]
-        data=[]
-        for i in range(0,self.NT):
-            data.append([self.Ai[i],self.Bi[i]])
-        print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
-        self.T[self.NT-1]=self.Bi[self.NT-1]
-        for i in range(self.NT-2,0,-1):
-            T_exp=(self.Ai[i]*self.T[i+1])+(self.Bi[i])
-            self.T[i]=T_exp  
-        self.T[0]=self.T[1]       
-                                                  ############## CENTERLINE BC ISSUE RESOLVED
-        print("T: ",self.T)
-        return self.T
-    
-    def run(self):
-        self.grid()
-        self.coefff()
-        self.bc()
-        self.TDMA_ST()
-    
-    def prnt(self):
-        plt.plot(self.r, self.T, label='Temperature vs. Radius')
-        plt.xlabel('Radius')
-        plt.ylabel('Temperature')
-        plt.title('Temperature Profile')
-        plt.legend()
-        plt.show()
-
+        '''
         col_names=["T","r"]
         data=[]
-        for i in range(0,NF+NC):
-            data.append([self.T[i],self.r[i]])
-    
-        print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))  
+        for i in range(0,self.NF+self.NC):
+            data.append([self.T_OLD[i],self.r[i]])
+        print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
+        '''
+
+        return self.T_OLD

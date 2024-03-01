@@ -18,7 +18,7 @@ class Variables:
         self.GT = 0.003
         self.HTC = 7800
         self.HTCC = 3276
-        self.NC = 400  # Some problem lies with NC
+        self.NC = 400
         self.NF = 5000
         self.NG = 1  # Always take 1 node to solve for gap that is at intersection between fuel and clad
         self.NT = self.NF + self.NC
@@ -29,9 +29,7 @@ class Variables:
         self.Rho = []
         self.Rho_O = []
         self.S = []
-        self.T = [0 for _ in range(0, self.NF + self.NC)]
         self.T_OLD = []
-        self.T_t = []
         self.qflux = 0
         self.r = []
         self.re = []
