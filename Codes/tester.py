@@ -1,19 +1,19 @@
-from tester2 import vars
+import tkinter as tk
+from tkinter import ttk
 
-class checker(vars):
+root = tk.Tk()
+root.title("Treeview Background Color Example")
 
-    def do(self):
-        print(self.one, self.two)
+# Create a Treeview widget
+tree = ttk.Treeview(root)
+tree.grid(row=0, column=0)
 
-apple = checker()
+# Configure the tag to set background color
+tree.tag_configure("bg", background="lightblue")  # Set the background color
 
-print(apple.two, apple.one)
-apple.two = 55
-print(apple.two, apple.one)
+# Insert items into the Treeview
+tree.insert("", "end", text="Item 1", tags=("bg",))
+tree.insert("", "end", text="Item 2", tags=("bg",))
+tree.insert("", "end", text="Item 3", tags=("bg",))
 
-a = [1,2,3]
-
-b = a
-print(a,b)
-b[2] = 111
-print(a,b)
+root.mainloop()
