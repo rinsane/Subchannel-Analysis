@@ -4,6 +4,7 @@ from tabulate import tabulate
 import matplotlib.pyplot as plt
 
 class func(Variables):
+    #i don't know;;''''''...//
     def grid(self):
         self.drf=self.R1/(self.NF-1)
         self.drc=(self.R3-self.R1-self.GT)/(self.NC-1)
@@ -25,9 +26,9 @@ class func(Variables):
                 r_n=self.R3
             self.r.append(r_n)
             r_o=r_n                                                                                     ####SOME  PROBLEM LIES WITH NC JUST IDENTIFY NOT GIVING GOOD RESULTS
-            print(r_n)                                                                               ## some issue with last node
-    
-                                                                                     ## some issue with last node
+            print(r_n)                                                                         
+            ## some issue with last node
+            ## some issue with last node
     
         #rw 
         for i in range(0,self.NF+self.NC):
@@ -76,6 +77,7 @@ class func(Variables):
     
         print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
     
+    #for calculating all the coefficients
     def coeff_T(self):
         self.AE.clear()
         self.AW.clear()
@@ -128,15 +130,11 @@ class func(Variables):
             else:
                 AQ_exp=0
             self.AQ.append(AQ_exp)
-        #print(AQ_exp)
         
         #CAQ
-       
-
         for i in range(0,self.NF+self.NC):
             CAQ_exp=self.shi*self.AQ[i]
             self.CAQ.append(CAQ_exp)
-            #print(CAQ_exp)
 
 
         #AT
@@ -174,6 +172,7 @@ class func(Variables):
         
         print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
     
+    #for calculating coefficients for boundary condition coefficients
     def bc(self):
         ####Nuemann Left Boundary    at centerline
         self.CAW[0] = 0
@@ -204,6 +203,7 @@ class func(Variables):
     
         print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
 
+    #Obviously to calculate Temperatures using TDMA
     def TDMA(self):
         for i in range(0,self.NT):
             if(i==0):
@@ -243,7 +243,7 @@ class func(Variables):
         return (T_OLD)
     
 
-
+    #runs all the functions in sequence and generates temperature profile for grid
     def run(self):
         self.grid()
         self.coeff_T()
