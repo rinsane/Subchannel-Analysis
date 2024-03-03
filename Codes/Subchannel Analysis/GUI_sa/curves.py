@@ -8,11 +8,16 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 
 def worker(NODE, Axial_length, Enthalpy, MassFlowRate, Pressure, Crossflow):
 
-    # MAIN PLOT PENDING CREATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-    def create_plot(option, plot_option):
+    # MAIN PLOT PENDING CREATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    Subchannel = ["SubChannel 1"]
+    PlotType = ["Pressure"]
+
+    def create_plot(option):
+        plot_option = PlotType[0]
         fig, ax = plt.subplots()
         fig.set_size_inches(8, 5.5)
-        schanl = 0 if option == "" else (int(option.split(' ')[1]) - 1)
+        schanl = int(option.split(' ')[1]) - 1
 
         if plot_option == "Pressure":
             # Plot Pressure
@@ -48,6 +53,10 @@ def worker(NODE, Axial_length, Enthalpy, MassFlowRate, Pressure, Crossflow):
         toolbar1.update()
         toolbar1.grid(row=0, column=0)
 
+    def type_setter(option):
+        PlotType[0] = option
+        create_plot(Subchannel[0])
+    
     def on_close():
         if messagebox.askyesno("Confirmation", "Are you sure you want to close the Plots?", parent=root):
             root.quit()
@@ -68,40 +77,30 @@ def worker(NODE, Axial_length, Enthalpy, MassFlowRate, Pressure, Crossflow):
     # Plot Frame
     frame = tk.Frame(root)
     frame.grid(row=1, column=1, rowspan=14)
-
-    options = [f"SubChannel {i + 1}" for i in range(NODE[0].NCHANL)]
-
-    option_buttons = []
-    selected_option = tk.StringVar()
-    selected_plot_option = tk.StringVar()
-
-    def show_plot_options(option):
-        # Clear previous plot option buttons
-        for widget in plot_option_frame.winfo_children():
-            widget.destroy()
-
-        # Create new plot option buttons
-        if option:
-            plot_options = ["Pressure", "Enthalpy", "Massflow Rate"]
-            for idx, plot_option in enumerate(plot_options):
-                button = tk.Radiobutton(plot_option_frame, text=plot_option, variable=selected_plot_option, value=plot_option, command=lambda opt=option, plt_opt=plot_option: create_plot(opt, plt_opt), bg=bgcolor1)
-                button.grid(row=idx + 1, column=0, sticky="w")
-
-    # Plot Options frames
-    plot_option_frame = tk.Frame(root)
+    
+    # Plot Options frame
+    plot_option_frame = tk.Frame(root, bg=bgcolor1)
     plot_option_frame.grid(row=1, column=2, rowspan=14)
 
-    # init
-    create_plot("", "")
+    options = [f"SubChannel {i + 1}" for i in range(NODE[0].NCHANL)]
+    plot_options = ["Pressure", "Enthalpy", "Massflow Rate"]
+
+    selected_option = tk.StringVar()
+    selected_plot_option = tk.StringVar()
+    
+    for idx, plot_option in enumerate(plot_options):
+        button = tk.Radiobutton(plot_option_frame, text=plot_option, variable=selected_plot_option, value=plot_option, command=lambda plt_opt=plot_option: type_setter(plt_opt), bg=bgcolor1)
+        button.grid(row=idx + 1, column=0, sticky="w")
 
     # Option radio buttons
     for idx, option in enumerate(options):
-        button = tk.Radiobutton(root, text=option, variable=selected_option, value=option, command=lambda option=option: show_plot_options(option), bg=bgcolor1)
+        button = tk.Radiobutton(root, text=option, variable=selected_option, value=option, command=lambda option=option: create_plot(option), bg=bgcolor1)
         button.grid(row=idx + 1, column=0, sticky="w")
-        option_buttons.append(button)
 
-    show_plot_options(options[0])
-
+    # init
+    create_plot(Subchannel[0])
+    
+    # EXCEL DATA ###########################################################    
     pwd = os.getcwd()
     file_path = pwd + r".\results.csv"
     data = []
@@ -113,18 +112,18 @@ def worker(NODE, Axial_length, Enthalpy, MassFlowRate, Pressure, Crossflow):
     for row1 in range(len(data[0])):
         data[0][row1] = data[0][row1].split('[')[0]
 
-    # EXCEL DATA ###########################################################    
     tree = ttk.Treeview(root)
     tree["columns"] = data[0][1:]
-    tree.heading("#0", text=data[0][0])
-
-    for col in data[0][1:]:
-        tree.heading(col, text=col)
     tree.grid(row=NODE[0].NCHANL + 1, column=0, columnspan=3, padx=10, pady=20)
     tree.tag_configure("bg", background=bgcolor2)
+    tree.tag_configure("font", font=("Courier New", 12))
+
+    tree.heading("#0", text=data[0][0])
+    for col in data[0][1:]:
+        tree.heading(col, text=col)
 
     for item in data[1:]:
-        tree.insert("", "end", text=item[0], values=item[1:])
+        tree.insert("", "end", text=item[0], values=item[1:], tags=("bg", "font"))
 
     tree.column("#0", width=100)
     tree.column(data[0][1], width=120+20)
