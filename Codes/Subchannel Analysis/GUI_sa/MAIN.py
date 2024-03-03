@@ -67,14 +67,18 @@ def main():
             LAST_ROW = ["", sum(F0), "", sum(F1), sum(H1), sum(C1), sum(H0_C1)]
 
             datas = zip(SCs, F0, H0, F1, H1, C1, H0_C1)
-            direc = os.path.dirname(os.path.abspath(__file__))
+            direc = os.getcwd()
             
             with open(direc+r"\results.csv", "w", newline='') as datasheet:
                 writer = csv.writer(datasheet)
                 writer.writerow(Headings)
                 writer.writerows(datas)
-
                 writer.writerow(LAST_ROW)
+                for types in list(parameters.keys())[:16]:
+                    writer.writerow([types, data_values[types].get()])
+                for types in list(parameters.keys())[16:]:
+                    writer.writerow([types, data_values[types].get("1.0", tk.END).strip().split("\n")])
+                
 
             # PLOT CREATION
             worker(NODE, Axial_length, Enthalpy, MassFlowRate, Pressure, Crossflow)
