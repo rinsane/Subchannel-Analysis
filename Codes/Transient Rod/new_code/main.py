@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 curr = 1
-while curr <= 10:
+while curr <= 1:
     runner = func()
     '''runner.T = [curr for _ in range(runner.NF + runner.NC)]
     runner.T_OLD = [runner.T[i] for i in range(runner.NF + runner.NC)]'''
