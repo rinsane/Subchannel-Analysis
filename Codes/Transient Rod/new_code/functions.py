@@ -3,7 +3,6 @@ import numpy as np
 from tabulate import tabulate
 
 class func(Variables):
-    #i don't know;;''''''...//
     def grid(self):
         self.drf=self.R1/(self.NF-1)
         self.drc=(self.R3-self.R1-self.GT)/(self.NC-1)
@@ -24,14 +23,7 @@ class func(Variables):
             else:
                 r_n=self.R3
             self.r.append(r_n)
-<<<<<<< HEAD:Codes/Transient/new code/functions.py
-            r_o=r_n                                                                                     ####SOME  PROBLEM LIES WITH NC JUST IDENTIFY NOT GIVING GOOD RESULTS
-            print(r_n)                                                                         
-            ## some issue with last node
-            ## some issue with last node
-=======
             r_o=r_n 
->>>>>>> 9cbfc5161ed5998bf3d70c04b6e4604ae862f365:Codes/Transient Rod/new_code/functions.py
     
         #rw 
         for i in range(0,self.NF+self.NC):
@@ -80,13 +72,8 @@ class func(Variables):
             data.append([self.r[i],self.rw[i],self.re[i],self.drw[i],self.dre[i]])
     
         print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
-<<<<<<< HEAD:Codes/Transient/new code/functions.py
-    
-    #for calculating all the coefficients
-=======
         '''    
 
->>>>>>> 9cbfc5161ed5998bf3d70c04b6e4604ae862f365:Codes/Transient Rod/new_code/functions.py
     def coeff_T(self):
         self.AE.clear()
         self.AW.clear()
@@ -139,11 +126,15 @@ class func(Variables):
             else:
                 AQ_exp=0
             self.AQ.append(AQ_exp)
+        #print(AQ_exp)
         
         #CAQ
+       
+
         for i in range(0,self.NF+self.NC):
             CAQ_exp=self.shi*self.AQ[i]
             self.CAQ.append(CAQ_exp)
+            #print(CAQ_exp)
 
 
         #AT
@@ -181,13 +172,8 @@ class func(Variables):
             data.append([self.CAW[i],self.CAE[i],self.CAP[i],self.S[i],self.AQ[i],self.AT[i],self.ATO[i]])
         
         print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
-<<<<<<< HEAD:Codes/Transient/new code/functions.py
-    
-    #for calculating coefficients for boundary condition coefficients
-=======
         '''
 
->>>>>>> 9cbfc5161ed5998bf3d70c04b6e4604ae862f365:Codes/Transient Rod/new_code/functions.py
     def bc(self):
         ####Nuemann Left Boundary    at centerline
         self.CAW[0] = 0
@@ -220,7 +206,6 @@ class func(Variables):
         print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
         '''
 
-    #Obviously to calculate Temperatures using TDMA
     def TDMA(self):
         for i in range(0,self.NT):
             if(i==0):
@@ -253,67 +238,4 @@ class func(Variables):
         print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
         '''
 
-<<<<<<< HEAD:Codes/Transient/new code/functions.py
-
-        plt.plot(self.r, self.T_OLD, label='Temperature vs. Radius')
-        plt.xlabel('Radius')
-        plt.ylabel('Temperature')
-        plt.title('Temperature Profile')
-        plt.legend()
-        plt.show() 
-        return (T_OLD)
-    
-
-    #runs all the functions in sequence and generates temperature profile for grid
-    def run(self):
-        self.grid()
-        self.coeff_T()
-        self.bc()
-        self.TDMA()
-        self.T_total=[]
-        for i in range(0,(self.t*1)):
-            self.Ai.clear()
-            self.Bi.clear()
-            if(i==1):
-                self.T[self.NT-1]=0
-                self.T_OLD[:]=self.T[:]
-            else:
-                #coeff_T()
-                self.T_t[:]=self.TDMA_T()
-                print("T: ",self.T_t)
-                self.T_OLD[:]=self.T_t[:]
-                print("T_old",self.T_OLD)
-    
-            ######saving results in an array####
-            if(i==0):
-                self.T_total.append(self.T[:])
-            else:
-                self.T_total.append(T_OLD[:])
-            print("T_total: ",self.T_total)
-
-        # col_names = ['time(sec)','temperature']
-         # data = []
-        # for i in range(0, (t*100)):
-        #    data.append([i+1,T_total[i]])
-
-        # print(tabulate(data, headers=col_names, tablefmt="fancy_grid"))   
-            #forming tabular form
-
-        for i in range(0,(self.t*1)):
-            if(i==0):
-                print("T_steady: ",self.T_total[i])
-            elif(i==(t)-1):
-                print("T_last: ",self.T_total[i])
-        for i in range(0,(self.t*1)):
-            if(i==0):
-                plt.plot(self.r,self.T_total[i],label='steady')
-        else:
-               plt.plot(self.r,self.T_total[i],label='transient')
-        plt.xlabel('lenght')
-        plt.ylabel('temperature')
-        plt.title('temperature vs length')
-        plt.legend()
-        plt.show()
-=======
         return self.T_OLD
->>>>>>> 9cbfc5161ed5998bf3d70c04b6e4604ae862f365:Codes/Transient Rod/new_code/functions.py
