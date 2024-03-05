@@ -4,7 +4,7 @@ from coefficient import *
 from bc import*
 import matplotlib.pyplot as plt
 
-def TDMA_T(i):
+def TDMA_T():
    
     for i in range(0,NT):
         if(i==0):
@@ -34,7 +34,8 @@ def TDMA_T(i):
     return (T_OLD)
     
 
-TDMA_T(i)
+
+TDMA_T()
 col_names=["T","r"]
 data=[]
 for i in range(0,NF+NC):

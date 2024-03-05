@@ -4,8 +4,8 @@ R1=0.012
 R2=0.015
 R3=0.021
 GT=0.003
-NF=5000
-NC=400                                        ##### SOME PROBLEM LIES WITH NC
+NF=13
+NC=8                                        ##### SOME PROBLEM LIES WITH NC
 NG=1                                        ### ALWAYS TAKE 1 NODE TO SOLVE FOR GAP THAT IS IT IS AT INTERSECTION BETWEEN FUEL AND CLAD  
 NT=NF+NC
 
@@ -46,7 +46,7 @@ qflux=0
 #C=[235 for i in range(0,NF+NC)]    
 #C_O=[235 for i in range(0,NF+NC)]                                                                         ### specific heat 
 
-Dt=1
+Dt=10e8
 t=1
 T_OLD = [T[i] for i in range(NF+NC)]
 T_t=[]

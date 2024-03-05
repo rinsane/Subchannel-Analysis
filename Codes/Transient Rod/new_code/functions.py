@@ -3,6 +3,7 @@ import numpy as np
 from tabulate import tabulate
 
 class func(Variables):
+
     def grid(self):
         self.drf=self.R1/(self.NF-1)
         self.drc=(self.R3-self.R1-self.GT)/(self.NC-1)
@@ -65,14 +66,13 @@ class func(Variables):
             self.dre.append(dre_n)
             #print(dre)
     
-        '''
         col_names=["r","rw","re","drw","dre"]
         data=[]
         for i in range(0,self.NF+self.NC):
             data.append([self.r[i],self.rw[i],self.re[i],self.drw[i],self.dre[i]])
     
-        print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
-        '''    
+        #print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
+
 
     def coeff_T(self):
         self.AE.clear()
@@ -165,46 +165,41 @@ class func(Variables):
             self.CAP.append(CAP_exp)
             #print(CAP_exp)
 
-        '''
         col_names=["CAW","CAE","CAP","S","AQ","AT","ATO"]
         data=[]
         for i in range(0,self.NF+self.NC):
             data.append([self.CAW[i],self.CAE[i],self.CAP[i],self.S[i],self.AQ[i],self.AT[i],self.ATO[i]])
         
-        print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
-        '''
+        #print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
+
 
     def bc(self):
-        ####Nuemann Left Boundary    at centerline
+        ####Nuemann Left Boundary at centerline
         self.CAW[0] = 0
         self.S[0] = self.S[0] + (self.shi*self.r[0]*self.qflux)
 
-
-        #########%Robin's Right Boundary            at fuel and gap surface
+        #########Robin's Right Boundary at fuel and gap surface
         self.CAE[self.NF]=self.CAE[self.NF]+self.shi*self.r[self.NF]*self.HTC
         self.CAP[self.NF] = self.CAP[self.NF] + self.shi*self.r[self.NF]*self.HTC
         self.S[self.NF] = self.S[self.NF] + (self.shi*self.r[self.NF]*self.HTC*((self.T[self.NF]+self.T[self.NF+1])/2))
 
-        ##Robin's Left Boundary                    AT GAP AND CLAD SURFACE
+        ##Robin's Left Boundary AT GAP AND CLAD SURFACE
         self.CAW[self.NF+1] = self.CAW[self.NF+1]+self.shi*self.r[self.NF+1]*self.HTC
         self.CAP[self.NF+1] = self.CAP[self.NF+1] + self.shi*self.r[self.NF+1]*self.HTC
         self.S[self.NF+1] = self.S[self.NF+1] + (self.shi*self.r[self.NF+1]*self.HTC*((self.T[self.NF]+self.T[self.NF+1])/2)) 
 
-
-
-        #########%Robin's Right Boundary            at CLAD and COOLANT surface
+        #########Robin's Right Boundary at CLAD and COOLANT surface
         self.CAE[self.NF+self.NC-1] = 0
         self.CAP[self.NF+self.NC-1] = self.CAP[self.NF+self.NC-1] + self.shi*self.r[self.NF+self.NC-1]*self.HTCC
         self.S[self.NF+self.NC-1] = self.S[self.NF+self.NC-1] + (self.shi*self.r[self.NF+self.NC-1]*self.HTCC*self.Tinf)
 
-        '''
         col_names=["CAW","CAE","CAP","S","AQ","AT","ATO"]
         data=[]
         for i in range(0,self.NF+self.NC):
             data.append([self.CAW[i],self.CAE[i],self.CAP[i],self.S[i],self.AQ[i],self.AT[i],self.ATO[i]])
     
-        print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
-        '''
+        #print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
+
 
     def TDMA(self):
         for i in range(0,self.NT):
@@ -218,24 +213,17 @@ class func(Variables):
                     Bi_exp=(self.S[i]+(self.CAW[i]*(self.Bi[i-1])))/(self.CAP[i]-(self.CAW[i]*self.Ai[i-1]))
                     self.Ai.append(Ai_exp)
                     self.Bi.append(Bi_exp)
-            
-        # print("Ai: ",self.Ai)
-        # print("Bi: ",self.Bi)
-    
+
         self.T_OLD[self.NT-1]=self.Bi[self.NT-1]
         for i in range(self.NT-2,-1,-1):
             T_to=(self.Ai[i]*self.T_OLD[i+1])+(self.Bi[i])
             self.T_OLD[i]=T_to  
-        # T[0]=T[1]       
-                                              ############## CENTERLINE BC ISSUE RESOLVED
-        # print("T: ",self.T_OLD)
         
-        '''
         col_names=["T","r"]
         data=[]
         for i in range(0,self.NF+self.NC):
             data.append([self.T_OLD[i],self.r[i]])
-        print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
-        '''
+        
+        #print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
 
         return self.T_OLD

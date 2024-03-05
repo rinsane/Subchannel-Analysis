@@ -16,23 +16,23 @@ for i in range(0,(t*1)):
         T_OLD[:]=T[:]
     else:
         #coeff_T()
-        T_t[:]=TDMA_T(i)
-        print("T: ",T_t)
+        T_t[:]=TDMA_T()
+         #print("T: ",T_t)
         T_OLD[:]=T_t[:]
-        print("T_old",T_OLD)
+        #print("T_old",T_OLD)
     
     ######saving results in an array####
     if(i==0):
         T_total.append(T[:])
     else:
         T_total.append(T_OLD[:])
-    print("T_total: ",T_total)
+    #print("T_total: ",T_total)
 
 # col_names = ['time(sec)','temperature']
 # data = []
 # for i in range(0, (t*100)):
 #    data.append([i+1,T_total[i]])
-
+     
 # print(tabulate(data, headers=col_names, tablefmt="fancy_grid"))   
     #forming tabular form
 

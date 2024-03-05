@@ -30,5 +30,7 @@ col_names=["CAW","CAE","CAP","S","AQ","AT","ATO"]
 data=[]
 for i in range(0,NF+NC):
     data.append([CAW[i],CAE[i],CAP[i],S[i],AQ[i],AT[i],ATO[i]])
+
+
     
 print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
