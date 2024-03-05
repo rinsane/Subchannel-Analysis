@@ -16,9 +16,9 @@ class DATA:
         self.dre    = []    # delta Re
         self.drw    = []    # delta Rw
         
-        self.R1 = 0.012
-        self.R2 = 0.015
-        self.GT     = 0.003
+        self.R1     = 0.012
+        self.R2     = 0.015
+        self.GT     = self.R2 - self.R1
         
         self.HTC    = 7800  # Heat Transfer Coefficient (fuel - gap - clad)
         self.HTCC   = 3276  # Heat Transfer Coefficient (clad - coolant)
