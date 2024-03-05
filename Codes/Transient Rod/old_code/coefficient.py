@@ -76,7 +76,7 @@ def coeff_T():
         for i in  range(0,NF+NC):
             ATO_exp=(Rho_O[i]*C_O[i])*((re[i]**2)-(rw[i]**2))/(2*Dt)
             ATO.append(ATO_exp)
-        # print("ATO",ATO)
+        #print("ATO",ATO)
         
         
         

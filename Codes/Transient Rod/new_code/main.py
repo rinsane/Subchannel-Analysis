@@ -1,3 +1,4 @@
+from tabulate import tabulate
 from functions import func
 import matplotlib.pyplot as plt
 
@@ -7,7 +8,6 @@ while curr <= 1:
     runner = func()
     '''runner.T = [curr for _ in range(runner.NF + runner.NC)]
     runner.T_OLD = [runner.T[i] for i in range(runner.NF + runner.NC)]'''
-    runner.Dt = curr
     curr += 0.1
     runner.grid()
     runner.coeff_T()
@@ -34,19 +34,16 @@ while curr <= 1:
         # print("T_total: ",T_total)
 
     plt.plot(runner.r, runner.T_OLD, label=f'Time {round(curr, 2)}')
+print(tabulate(list(zip([i for i in range(len(runner.T_OLD))],runner.T_OLD)), headers=col_names, tablefmt="fancy_grid"))   
 
 plt.xlabel('Radius')
 plt.ylabel('Temperature')
 plt.title('Temperature Profile')
 plt.legend()
 plt.show() 
-# col_names = ['time(sec)','temperature']
-    # data = []
-# for i in range(0, (t*100)):
-#    data.append(T_total[i]])
 
-# print(tabulate(data, headers=col_names, tablefmt="fancy_grid"))   
-    #forming tabular form
+col_names = ['time(sec)','temperature']
+
 
 '''for i in range(0,(runner.t*1)):
     if(i==0):

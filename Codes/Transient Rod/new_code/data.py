@@ -14,7 +14,7 @@ class Variables:
         self.CAW = []
         self.CAE=[]
         self.C_O = []
-        self.Dt = 1
+        self.Dt = 1e4
         self.GT = 0.003
         self.HTC = 7800
         self.HTCC = 3276
@@ -29,7 +29,6 @@ class Variables:
         self.Rho = []
         self.Rho_O = []
         self.S = []
-        self.T_OLD = []
         self.qflux = 0
         self.r = []
         self.re = []

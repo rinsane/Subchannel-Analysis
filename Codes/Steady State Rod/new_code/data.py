@@ -9,8 +9,8 @@ class DATA:
         
         self.CAP    = []    # CAE + CAW + Transient Term (= 0)
 
-        self.Ai     = []    # 
-        self.Bi     = []    # 
+        self.Ai     = []    # helper used in TDMA
+        self.Bi     = []    # helper used in TDMA 
         self.re     = []    # (ri + r(i+1))/2
         self.rw     = []    # (r(i-1) + ri)/2
         
