@@ -35,17 +35,12 @@ def main():
 
     # TDMA solver
     solver.TDMA_ST()
-    print("Ai: ",solver.Ai)
-    print("Bi: ",solver.Bi)
-
     solver.T[solver.NT-1]=solver.Bi[solver.NT-1]
     for i in range(solver.NT-2,0,-1):
         T_exp=(solver.Ai[i]*solver.T[i+1])+(solver.Bi[i])
         solver.T[i]=T_exp  
         
     solver.T[0]=solver.T[1]       
-
-    print("T: ",solver.T)
 
     col_names=["T","r"]
     data=[]

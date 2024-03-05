@@ -1,12 +1,10 @@
-import numpy as np
-
-class Variables:
+class DATA:
     def __init__(self):
         self.R1 = 0.012
         self.R2 = 0.015
         self.R3 = 0.021
         
-        self.Dt     = 1
+        self.Dt     = 1e8
         self.qflux  = 0
         self.Tinf   = 400
         self.GT     = 0.003

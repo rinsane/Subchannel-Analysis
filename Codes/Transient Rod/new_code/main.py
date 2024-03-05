@@ -1,46 +1,64 @@
+from functions import FUNCTIONS
 from tabulate import tabulate
-from functions import func
 import matplotlib.pyplot as plt
 
-curr = 0
-while curr <= 1000:
-    runner = func()
+def main(curr):
+    solver = FUNCTIONS()
     
     #'''
-    runner.T = [curr for _ in range(runner.NF + runner.NC)]
-    runner.T_OLD = [runner.T[i] for i in range(runner.NF + runner.NC)]
+    solver.T = [curr for _ in range(solver.NF + solver.NC)]
+    solver.T_OLD = [solver.T[i] for i in range(solver.NF + solver.NC)]
     #'''
-    #runner.Dt = curr
-    print(curr)
-    curr += 10
-    runner.grid()
-    runner.coeff_T()
-    runner.bc()
-    runner.TDMA()
+    #solver.Dt = curr
 
-    plt.plot(runner.r, runner.T_OLD, label='Temperature vs. Radius')
+    # grid solver
+    solver.grid()
+    col_names=["r","rw","re","drw","dre"]
+    data=[]
+    for i in range(0,solver.NF+solver.NC):
+        data.append([solver.r[i],solver.rw[i],solver.re[i],solver.drw[i],solver.dre[i]])
+
+    print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
+
+    # coefficient maker
+    solver.coefficient()
+    col_names=["CAW","CAE","CAP","S","AQ","AT","ATO"]
+    data=[]
+    for i in range(0,solver.NF+solver.NC):
+        data.append([solver.CAW[i],solver.CAE[i],solver.CAP[i],solver.S[i],solver.AQ[i],solver.AT[i],solver.ATO[i]])
+    
+    print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
+
+    # boundary conditions
+    solver.conditioniser()
+    col_names=["CAW","CAE","CAP","S","AQ","AT","ATO"]
+    data=[]
+    for i in range(0,solver.NF+solver.NC):
+        data.append([solver.CAW[i],solver.CAE[i],solver.CAP[i],solver.S[i],solver.AQ[i],solver.AT[i],solver.ATO[i]])
+
+    print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
+
+    # TDMA solver
+    solver.TDMA()
+    col_names=["T","r"]
+    data=[]
+    for i in range(0,solver.NF+solver.NC):
+        data.append([solver.T_OLD[i],solver.r[i]])
+    
+    print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
+
+    # plotting of data
+    plt.plot(solver.r, solver.T_OLD, label='Temperature vs. Radius')
     plt.xlabel('Radius')
     plt.ylabel('Temperature')
     plt.title('Temperature Profile')
     plt.legend()
 
-    '''
-    T_total=[]
-    for i in range(0,(runner.t)):
-        runner.Ai.clear()
-        runner.Bi.clear()
-        if(i==1):
-            runner.T[runner.NT-1]=0
-            runner.T_OLD[:]=runner.T[:]
-        else:
-            runner.T_t[:]=runner.TDMA()
-            runner.T_OLD[:]=runner.T_t[:]
 
-        ######saving results in an array####
-        if(i==0):
-            T_total.append(runner.T[:])
-        else:
-            T_total.append(runner.T_OLD[:])
-        '''
-
-plt.show()
+if __name__ == "__main__":
+    curr = 1
+    while curr <= 1:
+        main(curr)
+        print(curr)
+        curr += 10
+    plt.show()

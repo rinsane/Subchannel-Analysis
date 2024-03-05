@@ -1,6 +1,7 @@
-from data import DATA
+from data import *
 
 class FUNCTIONS(DATA):
+
     def grid(self):
         # drf and drc
         drf = self.R1 / (self.NF - 1)                       # delta Rf
@@ -61,6 +62,7 @@ class FUNCTIONS(DATA):
                 dre_n = 0
             self.dre.append(dre_n)
 
+
     def coefficient(self):
         # AW : (Rw*Kw) / (Rp - Rw)
         for i in range(0, self.NF + self.NC):
@@ -115,6 +117,7 @@ class FUNCTIONS(DATA):
             elif i == self.NF + self.NC - 1:
                 CAP_exp = self.CAW[i]
             self.CAP.append(CAP_exp)
+
 
     def conditioniser(self):
         # Nuemann Left Boundary [at CENTERLINE in FUEL ROD]
