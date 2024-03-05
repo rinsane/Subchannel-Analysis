@@ -6,7 +6,6 @@ class DATA:
         self.CAW    = []    # Ψ * AW
         self.AQ     = []    # Q taking conductance in considerations
         self.CAQ    = []    # Ψ * AQ
-        
         self.CAP    = []    # CAE + CAW + Transient Term (= 0)
 
         self.Ai     = []    # helper used in TDMA
