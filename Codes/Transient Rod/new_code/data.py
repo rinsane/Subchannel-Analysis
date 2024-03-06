@@ -5,8 +5,8 @@ class DATA:
         self.AW     = []    # (Rw*Kw) / (Rp - Rw)
         self.CAW    = []    # Ψ * AW
         self.AQ     = []    # Q taking conductance in considerations
-        self.CAQ    = []     # Ψ * AQ
-        self.CAP    = []    # CAE + CAW + Transient Term (= 0 maybe but ut was written in steady state code)
+        self.CAQ    = []    # Ψ * AQ
+        self.CAP    = []    # CAE + CAW + Transient Term (!= 0 maybe but it was written in steady state code)
         
         self.Ai     = []    # helper used in TDMA
         self.Bi     = []    # helper used in TDMA
