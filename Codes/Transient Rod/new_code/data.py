@@ -42,7 +42,7 @@ class DATA:
         self.Tinf   = 400
         
         self.Dt     = 1e8
-        self.t      = 1
+        self.t      = 100
         
         self.ATO    = []
         self.AT     = []

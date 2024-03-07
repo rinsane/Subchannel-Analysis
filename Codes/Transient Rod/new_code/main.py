@@ -1,7 +1,7 @@
 from functions import FUNCTIONS
 from tabulate import tabulate
 import matplotlib.pyplot as plt
-
+import pandas as pd
 def main(curr):
     solver = FUNCTIONS()
     
@@ -10,7 +10,7 @@ def main(curr):
     solver.T_OLD = [solver.T[i] for i in range(solver.NF + solver.NC)]
     #'''
     #solver.Dt = curr
-
+    print(solver.Dt)
     # grid solver
     solver.grid()
     col_names=["r","rw","re","drw","dre"]
@@ -46,7 +46,11 @@ def main(curr):
         data.append([solver.T_OLD[i],solver.r[i]])
     
     print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
-
+    
+    # Write T and r data to Excel
+    df = pd.DataFrame(data, columns=col_names)
+    df.to_excel(f'/Users/hiteshchoudhary2109/Desktop/mini-project/Subchannel-Analysis/Codes/Transient Rod/results/Fig4.xlsx', index=False)
+    
     # plotting of data
     plt.plot(solver.r, solver.T_OLD, label='Temperature vs. Radius')
     plt.xlabel('Radius')
@@ -59,6 +63,6 @@ if __name__ == "__main__":
     curr = 0
     while curr <= 1:
         main(curr)
-        print(curr)
+        print(f"curr:{curr}")
         curr += 10
     plt.show()

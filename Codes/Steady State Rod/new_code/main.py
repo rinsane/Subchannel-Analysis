@@ -1,7 +1,7 @@
 from functions import FUNCTIONS
 from tabulate import tabulate
 import matplotlib.pyplot as plt
-
+import pandas as pd
 # calculations are being carried out from the Clad Surface to the Centreline of the Fuel Rod
 def main():
     solver = FUNCTIONS()
@@ -48,7 +48,9 @@ def main():
         data.append([solver.T[i],solver.r[i]])
 
     print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
-
+    #saving data
+    df = pd.DataFrame(data, columns=col_names)
+    df.to_excel(f'/Users/hiteshchoudhary2109/Desktop/mini-project/Subchannel-Analysis/Codes/Steady State Rod/results/Fig.xlsx', index=False)
     # plotting of data
     plt.plot(solver.r, solver.T, label='Temperature vs. Radius')
     plt.xlabel('Radius')
