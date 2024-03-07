@@ -64,7 +64,7 @@ class FUNCTIONS(DATA):
 
 
     def coefficient(self):
-        # AW : (Rw*Kw) / (Rp - Rw)
+        # Bi = AW : (Rw*Kw) / (Rp - Rw)
         for i in range(0, self.NF + self.NC):
             if i == 0:
                 AW_ex = 0
@@ -77,7 +77,7 @@ class FUNCTIONS(DATA):
             CAW_exp = self.shi * self.AW[i]
             self.CAW.append(CAW_exp)
         
-        # AE : (Re*Ke) / (Re - Rp)
+        # Ai = AE : (Re*Ke) / (Re - Rp)
         for i in range(0, self.NF + self.NC):
             if i <= self.NF + self.NC - 2:
                 AE_exp = self.re[i] * self.kf[i] / self.dre[i]
@@ -90,7 +90,7 @@ class FUNCTIONS(DATA):
             CAE_exp = self.shi * self.AE[i]
             self.CAE.append(CAE_exp)
         
-        # AQ : list of heat generation terms (conductance included)
+        # AQ : list of heat generation terms (conductance included) [q'''(i) * r(i) * dr(i)]
         for i in range(0, self.NF + self.NC):
             if i <= self.NF + self.NC:  # Q taking conductance in considerations
                 AQ_exp = 0.5 * ((self.re[i] * self.re[i] - self.rw[i] * self.rw[i]) * self.Q[i])
@@ -103,23 +103,26 @@ class FUNCTIONS(DATA):
             CAQ_exp = self.shi * self.AQ[i]
             self.CAQ.append(CAQ_exp)
 
-        # AT : new Transient Term
+        # AT : rho(i) * C(at Ti) * r(i) * dri / delT
         for i in range(0,self.NF+self.NC):
             AT_exp=(self.Rho[i]*self.C[i])*((self.re[i]**2)-(self.rw[i]**2))/(2*self.Dt)
             self.AT.append(AT_exp)
         
+        # (re**2 - rw**2)/2 = r(i) * dr(i)
         
-        # ATO : new Transient Term
+        # ATO : rho(i) * C(at Ti) * r(i) * dr(i) / delT
         for i in  range(0,self.NF+self.NC):
             ATO_exp=(self.Rho_O[i]*self.C_O[i])*((self.re[i]**2)-(self.rw[i]**2))/(2*self.Dt)
             self.ATO.append(ATO_exp)
         
-        # S : source terms
+        # for now AT = ATO
+
+        # Ci = S : source terms
         for i in range(0, self.NF + self.NC):
-            S_exp = self.CAQ[i] + self.ATO[i] * self.T_OLD[i]
+            S_exp = self.CAQ[i] + self.ATO[i] * self.T_OLD[i] # ask why is it + instead of - page(3)
             self.S.append(S_exp)
 
-        # CAP : CAE + CAW + Transient Term (!= 0)
+        # Di = CAP : CAE + CAW + Transient Term (!= 0)
         for i in range(0, self.NF + self.NC):
             if i <= self.NF + self.NC - 1:
                 CAP_exp = self.CAE[i] + self.CAW[i] + self.AT[i]
@@ -130,8 +133,10 @@ class FUNCTIONS(DATA):
 
     def conditioniser(self):
         # Nuemann Left Boundary [at CENTERLINE in FUEL ROD]
+        #self.CAE[0] = 1 # paper
         self.CAW[0] = 0
         self.S[0] = self.S[0] + (self.shi*self.r[0]*self.qflux)
+        #self.S[0] = 0   # paper
 
         # Robin's Right Boundary [at FUEL and GAP SURFACE]
         self.CAE[self.NF]=self.CAE[self.NF]+self.shi*self.r[self.NF]*self.HTC

@@ -56,7 +56,7 @@ def main(curr):
 
 
 if __name__ == "__main__":
-    curr = 1
+    curr = 0
     while curr <= 1:
         main(curr)
         print(curr)
