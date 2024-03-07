@@ -3,6 +3,7 @@ from data import *
 class FUNCTIONS(DATA):
 
     def grid(self):
+        # Exactly same in steady and transient
         # drf and drc
         drf = self.R1 / (self.NF - 1)                       # delta Rf
         drc = (self.R3 - self.R1 - self.GT) / (self.NC - 1) # delta Rc
@@ -110,7 +111,7 @@ class FUNCTIONS(DATA):
             S_exp = self.CAQ[i]
             self.S.append(S_exp)
 
-        # CAP : CAE + CAW + Transient Term (= 0)
+        # CAP : CAE + CAW + (Transient Term (= 0))
         for i in range(0, self.NF + self.NC):
             if i <= self.NF + self.NC - 1:
                 CAP_exp = self.CAE[i] + self.CAW[i]

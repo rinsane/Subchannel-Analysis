@@ -3,6 +3,7 @@ from data import *
 class FUNCTIONS(DATA):
 
     def grid(self):
+        #Exactly same in steady and transient
         # drf and drc
         drf=self.R1/(self.NF-1)
         drc=(self.R3-self.R1-self.GT)/(self.NC-1)
@@ -19,7 +20,7 @@ class FUNCTIONS(DATA):
             elif i == self.NF:
                 r_n = self.R1 + self.GT
             elif i <= self.NF + self.NC - 2:
-                r_n = self.R1 + drc * (i - self.NF) + self.GT
+                r_n = self.R1  + self.GT + drc * (i - self.NF)
             else:
                 r_n = self.R3
             self.r.append(r_n)
