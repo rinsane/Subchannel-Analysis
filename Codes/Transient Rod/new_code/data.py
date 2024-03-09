@@ -41,8 +41,8 @@ class DATA:
         self.T      = [0 for _ in range(0, self.NF + self.NC)]
         self.Tinf   = 400
         
-        self.Dt     = 1e8
-        self.t      = 100
+        self.Dt     = 0.1
+        self.t      = 10
         
         self.ATO    = []
         self.AT     = []

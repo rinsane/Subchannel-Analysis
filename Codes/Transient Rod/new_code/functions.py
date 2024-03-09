@@ -137,7 +137,9 @@ class FUNCTIONS(DATA):
         self.CAW[0] = 0
         self.S[0] = self.S[0] + (self.shi*self.r[0]*self.qflux)
         #self.S[0] = 0   # paper
-
+        
+        #Ask for correctness in pdf
+        ##Doubt -- if NF-1 is the line that separates fuel and gap why are we assiginig NF and NF+1 below
         # Robin's Right Boundary [at FUEL and GAP SURFACE]
         self.CAE[self.NF]=self.CAE[self.NF]+self.shi*self.r[self.NF]*self.HTC
         self.CAP[self.NF] = self.CAP[self.NF] + self.shi*self.r[self.NF]*self.HTC

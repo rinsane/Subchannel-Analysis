@@ -10,7 +10,7 @@ def main(curr):
     solver.T_OLD = [solver.T[i] for i in range(solver.NF + solver.NC)]
     #'''
     #solver.Dt = curr
-    print(solver.Dt)
+    #print(solver.Dt)
     # grid solver
     solver.grid()
     col_names=["r","rw","re","drw","dre"]
