@@ -33,7 +33,7 @@ class DATA:
         self.qflux  = 0
         
         self.r      = []
-        self.R3 = 0.021
+        self.R3     = 0.021
         
         self.S      = []
         self.shi    = 1     # implicit factor
@@ -42,7 +42,7 @@ class DATA:
         self.Tinf   = 400
         
         self.Dt     = 0.1
-        self.t      = 10
+        #self.t      = 10 # useless
         
         self.ATO    = []
         self.AT     = []
@@ -54,7 +54,7 @@ class DATA:
         self.Rho_O  = []
         #kf=2.5  # thermal conductivity of fuel rod
         self.T_OLD  = [self.T[i] for i in range(self.NF + self.NC)]
-        self.T_t    = []
+
         for i in range(0, self.NF + self.NC):
             if i <= self.NF:
                 self.Q.append(1e7)
