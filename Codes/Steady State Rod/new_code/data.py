@@ -23,7 +23,8 @@ class DATA:
         self.HTC    = 7800  # Heat Transfer Coefficient (fuel - gap - clad)
         self.HTCC   = 3840  # Heat Transfer Coefficient (clad - coolant)
         
-        self.kf     = 2.5   # thermal conduvtivity of fuel rod
+        self.kf     = 2.5   # thermal conductivity of fuel rod
+        self.kc     = 21.5  # thermal conductivity of clad
         
         self.NG     = 1     # ALWAYS TAKE 1 NODE TO SOLVE FOR GAP THAT IS AT INTERSECTION BETWEEN FUEL AND CLAD  
         self.NC     = 8     # Number of domanins in cladding

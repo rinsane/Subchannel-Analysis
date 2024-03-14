@@ -141,14 +141,14 @@ class FUNCTIONS(DATA):
         #Ask for correctness in pdf
         ##Doubt -- if NF-1 is the line that separates fuel and gap why are we assiginig NF and NF+1 below
         # Robin's Right Boundary [at FUEL and GAP SURFACE]
-        self.CAE[self.NF]=self.CAE[self.NF]+self.shi*self.r[self.NF]*self.HTC
-        self.CAP[self.NF] = self.CAP[self.NF] + self.shi*self.r[self.NF]*self.HTC
-        self.S[self.NF] = self.S[self.NF] + (self.shi*self.r[self.NF]*self.HTC*((self.T[self.NF]+self.T[self.NF+1])/2))
+        self.CAE[self.NF-1]=self.CAE[self.NF-1]+self.shi*self.r[self.NF]*self.HTC
+        self.CAP[self.NF-1] = self.CAP[self.NF-1] + self.shi*self.r[self.NF]*self.HTC
+        self.S[self.NF-1] = self.S[self.NF-1] + (self.shi*self.r[self.NF]*self.HTC*((self.T[self.NF]+self.T[self.NF+1])/2))
 
         # Robin's Left Boundary [at GAP and CLAD SURFACE]
-        self.CAW[self.NF+1] = self.CAW[self.NF+1]+self.shi*self.r[self.NF+1]*self.HTC
-        self.CAP[self.NF+1] = self.CAP[self.NF+1] + self.shi*self.r[self.NF+1]*self.HTC
-        self.S[self.NF+1] = self.S[self.NF+1] + (self.shi*self.r[self.NF+1]*self.HTC*((self.T[self.NF]+self.T[self.NF+1])/2)) 
+        self.CAW[self.NF] = self.CAW[self.NF]+self.shi*self.r[self.NF+1]*self.HTC
+        self.CAP[self.NF] = self.CAP[self.NF] + self.shi*self.r[self.NF+1]*self.HTC
+        self.S[self.NF] = self.S[self.NF] + (self.shi*self.r[self.NF+1]*self.HTC*((self.T[self.NF]+self.T[self.NF+1])/2)) 
 
         # Robin's Right Boundary [at CLAD and COOLANT SURFACE]
         self.CAE[self.NF+self.NC-1] = 0

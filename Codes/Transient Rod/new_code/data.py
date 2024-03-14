@@ -52,7 +52,10 @@ class DATA:
         self.Q      = []
         self.Rho    = []
         self.Rho_O  = []
-        #kf=2.5  # thermal conductivity of fuel rod
+        
+        Kf          = 2.5   # thermal conductivity of fuel rod
+        Kc          = 21.5  # thermal conductivity of clad
+        
         self.T_OLD  = [self.T[i] for i in range(self.NF + self.NC)]
 
         for i in range(0, self.NF + self.NC):
@@ -62,11 +65,11 @@ class DATA:
                 self.Rho_O.append(18900)
                 self.C.append(120)
                 self.C_O.append(120)
-                self.kf.append(10)
+                self.kf.append(Kf)
             else:
                 self.Q.append(0)
                 self.Rho.append(6510)
                 self.Rho_O.append(6510)
                 self.C.append(270)
                 self.C_O.append(270)
-                self.kf.append(20)
+                self.kf.append(Kc)

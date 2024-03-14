@@ -48,15 +48,22 @@ def main():
         data.append([solver.T[i],solver.r[i]])
 
     print(tabulate(data,headers=col_names,tablefmt="fancy_grid",showindex="always"))
+    
+    '''
     #saving data
+    # Write T and r data to Excel
+    dirr = os.getcwd()
     df = pd.DataFrame(data, columns=col_names)
-    df.to_excel(f'/Users/hiteshchoudhary2109/Desktop/mini-project/Subchannel-Analysis/Codes/Steady State Rod/results/Fig.xlsx', index=False)
+    df.to_excel(dirr+r'/Fig4.xlsx', index=False)
+    '''
+    
     # plotting of data
-    plt.plot(solver.r, solver.T, label='Temperature vs. Radius')
-    plt.xlabel('Radius')
-    plt.ylabel('Temperature')
+    plt.plot(solver.r, solver.T, label='Temperature vs. Radius', marker='.')
+    plt.xlabel('Radius (metre)')
+    plt.ylabel('Temperature (Kelvin)')
     plt.title('Temperature Profile')
     plt.legend()
+    plt.grid()
     plt.show()
 
 if __name__ == "__main__":

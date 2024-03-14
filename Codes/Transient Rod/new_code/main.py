@@ -50,10 +50,11 @@ def main(solver, curr):
     '''
 
     # plotting of data
-    plt.plot(solver.r, solver.T_OLD, label=f'T vs. R at t = {round(curr, 2)} sec')
-    plt.xlabel('Radius')
-    plt.ylabel('Temperature')
+    plt.plot(solver.r, solver.T_OLD, label=f'T vs. R at t = {round(curr, 2)} sec', marker='.')
+    plt.xlabel('Radius (metre)')
+    plt.ylabel('Temperature (Kelvin)')
     plt.title('Temperature Profile')
+    plt.grid()
     plt.legend()
 
     return solver.T_OLD
