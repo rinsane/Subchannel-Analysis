@@ -21,7 +21,7 @@ class DATA:
         self.GT     = self.R2 - self.R1
         
         self.HTC    = 7800  # Heat Transfer Coefficient (fuel - gap - clad)
-        self.HTCC   = 3276  # Heat Transfer Coefficient (clad - coolant)
+        self.HTCC   = 3840  # Heat Transfer Coefficient (clad - coolant)
         
         self.kf     = []    # thermal conduvtivity of fuel rod
         
