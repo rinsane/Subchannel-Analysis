@@ -21,17 +21,17 @@ class DATA:
         self.GT     = self.R2 - self.R1
         
         self.HTC    = 7800  # Heat Transfer Coefficient (fuel - gap - clad)
-        self.HTCC   = 3840  # Heat Transfer Coefficient (clad - coolant)
+        self.HTCC   = 3276  # Heat Transfer Coefficient (clad - coolant)
         
-        self.kf     = 2.5   # thermal conductivity of fuel rod
-        self.kc     = 21.5  # thermal conductivity of clad
+        self.kf     = 10   # thermal conductivity of fuel rod
+        self.kc     = 20   # thermal conductivity of clad
         
         self.NG     = 1     # ALWAYS TAKE 1 NODE TO SOLVE FOR GAP THAT IS AT INTERSECTION BETWEEN FUEL AND CLAD  
         self.NC     = 8     # Number of domanins in cladding
         self.NF     = 13    # Number of domains in fuel rods
         self.NT     = self.NF + self.NC # Total number of domains.
          
-        self.qflux  = 0
+        self.qflux  = 34285.71
         
         self.r      = []
         self.R3     = 0.021

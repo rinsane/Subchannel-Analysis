@@ -21,7 +21,7 @@ class DATA:
         self.GT     = self.R2 - self.R1
         
         self.HTC    = 7800  # Heat Transfer Coefficient (fuel - gap - clad)
-        self.HTCC   = 3840  # Heat Transfer Coefficient (clad - coolant)
+        self.HTCC   = 3276  # Heat Transfer Coefficient (clad - coolant)
         
         self.kf     = []    # thermal conduvtivity of fuel rod
         
@@ -30,7 +30,7 @@ class DATA:
         self.NF     = 13    # Number of domains in fuel rods
         self.NT     = self.NF + self.NC # Total number of domains.
         
-        self.qflux  = 0
+        self.qflux  = 34285.71
         
         self.r      = []
         self.R3     = 0.021
@@ -53,8 +53,8 @@ class DATA:
         self.Rho    = []
         self.Rho_O  = []
         
-        Kf          = 2.5   # thermal conductivity of fuel rod
-        Kc          = 21.5  # thermal conductivity of clad
+        Kf          = 10    # thermal conductivity of fuel rod
+        Kc          = 20    # thermal conductivity of clad
         
         self.T_OLD  = [self.T[i] for i in range(self.NF + self.NC)]
 
