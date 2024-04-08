@@ -98,7 +98,7 @@ class FUNCTIONS(DATA):
         # AQ : list of heat generation terms (conductance included)
         for i in range(0, self.NF + self.NC):
             if i < self.NF: # fuel Rod conductance
-                Q = 280 * 1e6 * (1 + 0.2 * ((self.r[i] / self.R1) ** 2))
+                Q = 1e6
             else:           # gap conductance
                 Q = 0
             # Q taking conductance in considerations
@@ -154,13 +154,15 @@ class FUNCTIONS(DATA):
                 Bi_exp = self.S[i] / self.CAP[i]
                 self.Ai.append(Ai_exp)
                 self.Bi.append(Bi_exp)
-            elif i == self.NT:
-                Ai_exp = self.CAW[i] / self.CAP[i]
-                Bi_exp = self.S[i] / self.CAP[i]
-                self.Ai.append(Ai_exp)
-                self.Bi.append(Bi_exp)
             else:
                 Ai_exp = self.CAE[i] / (self.CAP[i] - (self.CAW[i] * self.Ai[i - 1]))
                 Bi_exp = (self.S[i] + (self.CAW[i] * self.Bi[i - 1])) / (self.CAP[i] - (self.CAW[i] * self.Ai[i - 1]))
                 self.Ai.append(Ai_exp)
                 self.Bi.append(Bi_exp)
+
+        self.T[self.NT-1]=self.Bi[self.NT-1]
+        for i in range(self.NT-2,0,-1):
+            T_exp=(self.Ai[i]*self.T[i+1])+(self.Bi[i])
+            self.T[i]=T_exp  
+            
+        self.T[0]=self.T[1]  

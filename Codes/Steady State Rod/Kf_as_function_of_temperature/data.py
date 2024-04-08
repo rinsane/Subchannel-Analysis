@@ -16,29 +16,28 @@ class DATA:
         self.dre    = []    # delta Re
         self.drw    = []    # delta Rw
         
-        self.R1     = 0.006
-        self.R2     = 0.0062
+        self.R1     = 0.012
+        self.R2     = 0.015
         self.GT     = self.R2 - self.R1
         
-        self.HTC    = 5500  # Heat Transfer Coefficient (fuel - gap - clad)
-        self.HTCC   = 3840  # Heat Transfer Coefficient (clad - coolant)
+        self.HTC    = 7800  # Heat Transfer Coefficient (fuel - gap - clad)
+        self.HTCC   = 3280  # Heat Transfer Coefficient (clad - coolant)
         
-        self.kf     = 5.88   # thermal conductivity of fuel rod
-        self.kc     = 16   # thermal conductivity of clad
+        self.kf     = 2.5   # thermal conductivity of fuel rod
+        self.kc     = 2.5   # thermal conductivity of clad
         
         self.NG     = 1     # ALWAYS TAKE 1 NODE TO SOLVE FOR GAP THAT IS AT INTERSECTION BETWEEN FUEL AND CLAD  
         self.NC     = 4     # Number of domanins in cladding
         self.NF     = 8     # Number of domains in fuel rods
         self.NT     = self.NF + self.NC # Total number of domains.
          
-        self.qflux  = 34285.71
+        self.qflux  = 3430
         
         self.r      = []
-        self.R3     = 0.0072
+        self.R3     = 0.021
         
         self.S      = []
         self.shi    = 1     # implicit factor
         
+        self.Tinf   = 400
         self.T      = [0 for _ in range(self.NF + self.NC)]
-        print(self.T)
-        self.Tinf   = 590

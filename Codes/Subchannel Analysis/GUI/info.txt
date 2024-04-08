@@ -1,0 +1,10 @@
+direc + "/images/background.jpg"
+
+bg_color="#003f87" #dark
+bg_color="#00aae7" #light
+font=("Montserrat", 40)
+
+
+heading.place(x=185, y=45)
+uploadFile.place(x=360, y=300)
+demoFile.place(x=250, y=500)

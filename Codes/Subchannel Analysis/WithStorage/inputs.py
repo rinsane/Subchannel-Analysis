@@ -13,7 +13,6 @@ class variables:
    FACK    = 0.01
    FT      = 0.02 # turbulent factor used to compensate imperfect analogy bw turbulent transport of enthalpy and momentum
    GAMA    = 0.5
-
    GC      = 9.81 # g
    NCHANL  = 65 # no of subchannel
    NK      = 109 # no of connections
