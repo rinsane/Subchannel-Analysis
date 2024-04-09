@@ -1,1 +1,1 @@
-25
+"apples", "bananas"

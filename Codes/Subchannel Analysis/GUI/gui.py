@@ -25,10 +25,13 @@ def main():
         if filepath[0]:
             status.configure(text=f"  Status: Uploaded File -> {os.path.basename(filepath[0])}")
             data = pd.read_excel(filepath[0])
-            data = [list(data.keys())] + (data.values.tolist())
-            print(data)
-            table.update_values(values=data)
-            print(data)
+            data = [list(headings.keys())] + data.values.tolist()
+            nonlocal table
+            table = CTkTable(table_frame, values=data, wraplength=890/6, font=(font_type, 15), justify="left", colors=["#454545", "#515151"], header_color=dark_col, hover_color=light_col, width=890/6)
+            table.grid(row=0, column=0, padx=10)
+            table.edit_row(0, font=(font_type, 14, "bold"))
+            table.edit_column(5, width=(900/6)//2)
+            table.edit_column(6, width=(900/6)//2)
 
     # Function to process data
     def process_data():
@@ -36,6 +39,8 @@ def main():
             status.configure(text=f"  Status: No File Uploaded!")
         else:
             status.configure(text=f"  Status: Processing... Please Wait...")
+            data = pd.read_excel(filepath[0])
+            data = [list(headings.keys())] + data.values.tolist()
 
     # Function to download template Excel file
     def download_template():
@@ -43,9 +48,9 @@ def main():
         template_data = {}
         for i in headings:
             if i == "Constants:":
-                template_data[i] = constants + [""] * (lenizer - len(constants))
+                template_data[i] = constants + [" "] * (lenizer - len(constants))
             else:
-                template_data[i] = [""] * lenizer
+                template_data[i] = [" "] * lenizer
         template_df = pd.DataFrame(template_data)
         template_path = os.path.join(direc, 'template.xlsx')
         template_df.to_excel(template_path, index=False)
@@ -124,7 +129,7 @@ def main():
     # TABLE For Excel
     table_frame = ctk.CTkScrollableFrame(root, width=1064, height=479.5, fg_color=light_col, corner_radius=0)
     table_frame.grid(row=2, column=0)
-    table = CTkTable(table_frame, values=table_data, wraplength=865/6, font=(font_type, 15), justify="left", colors=["#454545", "#515151"], header_color=dark_col, hover_color=light_col, width=900/6)
+    table = CTkTable(table_frame, values=table_data, wraplength=890/6, font=(font_type, 15), justify="left", colors=["#454545", "#515151"], header_color=dark_col, hover_color=light_col, width=890/6)
     table.grid(row=0, column=0, padx=10)
     table.edit_row(0, font=(font_type, 14, "bold"))
     table.edit_column(5, width=(900/6)//2)
@@ -133,41 +138,8 @@ def main():
     # STATUS Label
     status = ctk.CTkLabel(root, text="  Status:", font=(font_type, font_size, "bold"), bg_color=light_col, anchor="w", height=45, width=1080)
     status.grid(row=3, column=0, sticky="w")
-    
-    '''
 
-    # Definitions
-    
-    x_loc = 30
-    y_loc = 40
-
-    # Label to display uploaded file name
-    file_label = ctk.CTkLabel(main_frame, text="Uploaded File: None", font=(font_type, font_size),
-                            bg_color=light_col)
-    file_label.place(x=x_loc, y=y_loc)
-
-    # Upload button
-    upload_button = ctk.CTkButton(main_frame, text="Upload Excel File", command=upload_excel, font=(font_type, font_size),
-                                bg_color=light_col, width=500)
-    upload_button.place(x=x_loc, y=y_loc + 100)
-
-    # Process button
-    process_button = ctk.CTkButton(main_frame, text="Process Data", command=process_data, font=(font_type, font_size),
-                                bg_color=light_col, width=500)
-    process_button.place(x=x_loc, y=y_loc + 200)
-
-    # Label to display if processing file is uploaded or not
-    confirmation = ctk.CTkLabel(main_frame, text="", font=(font_type, font_size),
-                            bg_color=light_col)
-    confirmation.place(x=x_loc, y=y_loc + 300)
-
-    # Button to download template Excel file
-    download_button = ctk.CTkButton(main_frame, text="Download Template Excel", command=download_template, font=(font_type, font_size),
-                                bg_color=light_col, width=500)
-    download_button.place(x=x_loc, y=y_loc + 400)
-    '''
     root.mainloop()
-
 
 if __name__ == "__main__":
     main()
