@@ -7,23 +7,26 @@ import numpy as np
 
 class variables:
 
-   ALPHA   = 90 # (ANGLE )
-   AXLN    = 0.1
-   DELTA   = 0.5
-   FACK    = 0.01
-   FT      = 0.1 # turbulent factor used to compensate imperfect analogy bw turbulent transport of enthalpy and momentum
-   GAMA    = 0.5
-
-   GC      = 9.81 # g
-   NCHANL  = 14 # no of subchannel
-   NK      = 19 # no of connections
-   NNODE   = 500
-   RDIA    = 0.01308  
-   RHO     = 817.4  
-   SLP     = 0.5 
-   THETA   = 0.5 # IMPLICIT FAV
-   VISC    = 0.000011
+   ALPHA   = 90         # angle at which rods are inclined                                                       
+   AXLN    = 0.1        # axial length of fuel rod                                                    
+   DELTA   = 0.5        # correction factor                                                  
+   FACK    = 0.01       # momentum correction factor                                                              
+   FT      = 0.1        # turbulent factor used to compensate imperfect analogy                                 
+                        # bw turbulent transport of enthalpy and momentum                                      
+   GAMA    = 0.5        # correction factor                                                                                
+   GC      = 9.81       # g                                                                                 
+   NCHANL  = 14         # no of subchannel                                                      
+   NK      = 19         # no of connections                                                        
+   NNODE   = 500        # number of nodes                                                    
+   RDIA    = 0.01308    # diameter of fuel rod                                               
+   RHO     = 817.4      # density at given system pressure                                            
+   SLP     = 0.5        # (slip) ratio of length between subchannel centroids                                                 
+                        # to the width of the control volume                                                
+   THETA   = 0.5        # implicit factor                                                                
+   VISC    = 0.000011   # viscosity                                                                               
    DELX    = AXLN/(NNODE-1)
+
+
    GAP     = [.0018034,.0009,.0009,.0018034,.0018034,.0009,.0018034,.0009,.0018034,.004140000,.00414,.0018034,.000991,.0019558,.0019558,.000991,.00194,.00194,.00194]
    #Hydraulic Diameter
    HDIA    = [.0056277,.0056277,.0084154,.005627,.0084154,.0084154,.0074985,.0094202,.0074485,.0084154,.0070309,.0070309,.0070309,.0070309]

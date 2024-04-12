@@ -182,17 +182,17 @@ def main():
             Crossflow[chan].append(NODE[1].WIJ1[chan])
 
         #DATA STORING
-        direc2 = os.path.dirname(os.path.abspath(__file__)) + "\Subchannels"
+        direc2 = os.path.dirname(os.path.abspath(__file__)) + r"\Subchannels"
         if i == 0:
             for channel in range(NODE[1].NCHANL):
-                with open(direc2+f"\Channel {channel + 1}.csv", 'w', newline='') as file:
+                with open(direc2+rf"\Channel {channel + 1}.csv", 'w', newline='') as file:
                     writer = csv.writer(file)
                     writer.writerow(["Node Number", "Pressure", "Enthalpy", "CrossFlow", "MassFlow"])
                     writer.writerow([0, NODE[1].P1[channel], NODE[1].H1[channel], NODE[1].WIJ1[channel], NODE[1].F1[channel]])
 
         else:
             for channel in range(NODE[1].NCHANL):
-                with open(direc2+f"\Channel {channel + 1}.csv", 'a', newline='') as file:
+                with open(direc2+rf"\Channel {channel + 1}.csv", 'a', newline='') as file:
                     writer = csv.writer(file)
                     writer.writerow([i, NODE[1].P1[channel], NODE[1].H1[channel], NODE[1].WIJ1[channel], NODE[1].F1[channel]])
 

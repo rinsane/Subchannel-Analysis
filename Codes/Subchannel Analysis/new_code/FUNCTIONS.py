@@ -2,8 +2,6 @@ import numpy as np
 from inputs import variables
 import math
 
-
-
 class sub_routines(variables):
 
     def AXIMOM(self):
