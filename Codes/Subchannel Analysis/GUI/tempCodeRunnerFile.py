@@ -1,1 +1,2 @@
-"apples", "bananas"
+a = 'aaa'
+print(int(a))
