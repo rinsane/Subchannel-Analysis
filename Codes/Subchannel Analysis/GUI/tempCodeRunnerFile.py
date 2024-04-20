@@ -1,2 +1,1 @@
-a = 'aaa'
-print(int(a))
+height_size//4

@@ -2,7 +2,6 @@ from FUNCTIONS import sub_routines
 import sys
 from tabulate import tabulate
 import matplotlib.pyplot as plt
-import numpy as np
 import csv
 import os
 import copy
@@ -50,7 +49,7 @@ def main():
     Pressure = [[] for _ in range(NODE[0].NCHANL)]      # P1
     Crossflow = [[] for _ in range(NODE[0].NK)]
 
-    for i in range(NODE[0].NNODE):                                       ### CERTAIN CLARFICATION
+    for i in range(NODE[0].NNODE):                                       ### CERTAIN CLARIFICATION
 
         #For setting the boundary condition -- no error
         if i == 0:
@@ -77,6 +76,7 @@ def main():
         '''/////////////////////////////////////////////////'''
         #CALLING THE SKI    
         NODE[1].SKI()
+
         '''print("Connecting matrix")
         print(tabulate(NODE[1].S, tablefmt="fancy_grid"))
         check = True
@@ -197,7 +197,7 @@ def main():
                     writer.writerow([i, NODE[1].P1[channel], NODE[1].H1[channel], NODE[1].WIJ1[channel], NODE[1].F1[channel]])
 
 
-        
+        ################################## THIS IS WHERE THE COPYING IS HAPPENING
         NODE[0] = copy.deepcopy(NODE[1])
 
     # DATA TABULATION
@@ -226,10 +226,10 @@ def main():
         
     data_dict = {
         "Node": list(range(NODE[0].NNODE)),
-        "Pressure (P1)": [NODE[1].P1 for i in range(NODE[0].NNODE)],
-        "Enthalpy (H1)": [NODE[1].H1 for i in range(NODE[0].NNODE)],
-        "Mass Flow Rate (F1)": [NODE[1].F1 for i in range(NODE[0].NNODE)],
-        "Crossflow Rate (WIJ1)": [NODE[1].WIJ1 for i in range(NODE[0].NNODE)]
+        "Pressure (P1)": [NODE[1].P1 for _ in range(NODE[0].NNODE)],
+        "Enthalpy (H1)": [NODE[1].H1 for _ in range(NODE[0].NNODE)],
+        "Mass Flow Rate (F1)": [NODE[1].F1 for _ in range(NODE[0].NNODE)],
+        "Crossflow Rate (WIJ1)": [NODE[1].WIJ1 for _ in range(NODE[0].NNODE)]
     }
 
     df = pd.DataFrame(data_dict)
