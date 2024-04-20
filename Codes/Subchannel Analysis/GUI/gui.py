@@ -1,3 +1,4 @@
+from analysis import subchannel_analysis
 import os
 import customtkinter as ctk
 import tkinter as tk
@@ -37,7 +38,10 @@ def main():
 
     # Function to upload Excel file
     def upload_excel():
-        filepath[0] = tk.filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx;*.xls")])
+        # filepath[0] = tk.filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx;*.xls")])
+        ########## DEBUG
+        filepath[0] = r"E:\COde work\Things\Subchannel-Analysis\Codes\Subchannel Analysis\GUI\gooddata.xlsx"
+        
         if filepath[0]:
             status.configure(text=f"  Status: Uploaded File -> {os.path.basename(filepath[0])}")
             data = pd.read_excel(filepath[0])
@@ -84,12 +88,12 @@ def main():
             status.configure(text=f"  Status: Heated Perimeter Values entered are not numbers/insufficient!")
             return 0
         try:
-            ic = [float(i) for i in data[titles[4]].tolist()[:nk]]
+            ic = [int(i) for i in data[titles[4]].tolist()[:nk]]
         except:
             status.configure(text=f"  Status: Interconnection (IC) Values entered are not numbers/insufficient!")
             return 0
         try:
-            jc = [float(i) for i in data[titles[5]].tolist()[:nk]]
+            jc = [int(i) for i in data[titles[5]].tolist()[:nk]]
         except:
             status.configure(text=f"  Status: Interconnecton (JC) Values entered are not numbers/insufficient!")
             return 0
@@ -105,33 +109,6 @@ def main():
             return 0        
         return [values[:16], gap, hdia, hperi, ic, jc, a, f0, hf, h0]
 
-    # Function for Progress Bar
-    def calculator(valid):
-        nnode = valid[0][9]
-        print(nnode)
-        processing = tk.Toplevel(root)
-        processing.title("Analysing Subchannels")
-        processing.geometry(f"+{screen_width//3}+{screen_height//4}")
-        processing.configure(bg=light_col)
-
-        progressBar = ctk.CTkProgressBar(processing, width=width_size/2, height=height_size/4, orientation="horizontal", determinate_speed=50/(nnode+1))
-        progressBar.grid(row=0, column=0, pady=height_size/1.5, padx=width_size/40)
-        progressBar.set(0)
-        progressLabel = ctk.CTkLabel(processing, width=width_size/2, height=height_size/4, text="processing...", font=(font_type, height_size/2, "bold"), anchor="w")
-        progressLabel.grid(row=1, column=0, pady=height_size/2, padx=width_size/40, sticky="w")
-
-        def update_progress(progressbar, count):
-            if count <= nnode:
-                progressBar.step()
-                for i in range(10):
-                    print(i)
-                print()
-                print()
-                progressLabel.configure(text=f"value of count: {count}")
-                root.after(1, update_progress, progressbar, count + 1)  # Schedule next update after 100ms
-
-        update_progress(progressBar, 1)
-
     # Function to process data
     def process_data():
         if filepath == ['']:
@@ -142,7 +119,7 @@ def main():
                 status.configure(text=f"  Status: Processing... Please Wait...")
                 for i in valid:
                     print(i)
-                calculator(valid)
+                subchannel_analysis(valid, root)
             else:
                 pass    
 
