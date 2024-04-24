@@ -1,45 +1,14 @@
 from routines import sub_routines
-import sys
-import csv
-import os
-import copy
+from plotting_gui import plotting
+import csv, os, copy
 import customtkinter as ctk
 import tkinter as tk
 import matplotlib.pyplot as plt
 from tabulate import tabulate
 import pandas as pd
+from time import sleep
 
-'''#Temporary matrix multiplication function for use
-def matrix_multiply(A, B):
-    # Check if the number of columns in A is equal to the number of rows in B
-    if len(A[0]) != len(B):
-        raise ValueError("Number of columns in A must be equal to the number of rows in B")
-
-    # Initialize the result matrix with zeros
-    result = [[0 for _ in range(len(B[0]))] for _ in range(len(A))]
-
-    # Perform matrix multiplication using nested loops
-    for i in range(len(A)):
-        for j in range(len(B[0])):
-            for k in range(len(B)):
-                result[i][j] += A[i][k] * B[k][j]
-
-    return result
-#Temporary function
-def check_zero_sums(matrix):
-    """
-    Check if the sum of elements in every row and every column is zero.
-
-    Parameters:
-    - matrix: Input matrix (2D list or NumPy array)
-
-    Returns:
-    - True if the sums are zero, False otherwise
-    """
-    row_sums = np.sum(matrix, axis=1)
-    col_sums = np.sum(matrix, axis=0)
-
-    return all(row_sum == 0 for row_sum in row_sums) and all(col_sum == 0 for col_sum in col_sums)'''
+DIREC = os.path.dirname(os.path.abspath(__file__))
 
 def subchannel_analysis(values, root):
 
@@ -59,17 +28,20 @@ def subchannel_analysis(values, root):
 
     # Function for Progress Bar
     nnode = values[0][9]
-    print(nnode)
     processing = tk.Toplevel(root)
-    processing.title("Analysing Subchannels")
+    processing.iconbitmap(DIREC + r"\images\favicon.ico")
+    processing.focus_set()
+    processing.title("Computing...")
     processing.geometry(f"+{screen_width//3}+{screen_height//4}")
     processing.configure(bg=light_col)
 
-    progressBar = ctk.CTkProgressBar(processing, width=width_size/2, height=height_size/4, orientation="horizontal", determinate_speed=50/(nnode+1))
-    progressBar.grid(row=0, column=0, pady=height_size/1.5, padx=width_size/40)
+    progressBar = ctk.CTkProgressBar(processing, border_color="white", border_width=1, progress_color=button_hover, width=width_size/3, height=height_size/2, orientation="horizontal", determinate_speed=50/(nnode+1))
+    progressBar.grid(row=0, column=0, pady=height_size/2, padx=width_size/40)
     progressBar.set(0)
-    progressLabel = ctk.CTkLabel(processing, width=width_size/2, height=height_size/4, text="processing...", font=(font_type, height_size/2, "bold"), anchor="w")
-    progressLabel.grid(row=1, column=0, pady=height_size/2, padx=width_size/40, sticky="w")
+    progressLabel = ctk.CTkLabel(processing, width=width_size/3, height=height_size/4, text="", font=(font_type, height_size/3.5, "bold"), anchor="w")
+    progressLabel.grid(row=1, column=0, padx=width_size/40, sticky="w")
+    buffer = ctk.CTkLabel(processing, height=height_size/2, text="")
+    buffer.grid(row=2, column=0)
 
     NODE = [sub_routines() for _ in range(2)]
 
@@ -116,51 +88,25 @@ def subchannel_analysis(values, root):
                 NODE[1].H0 = NODE[0].H1.copy()
 
             '''/////////////////////////////////////////////////'''
-            #CALLING THE SKI    
+            # CALLING SUBROUTINES 
+            progressLabel.configure(text=f"Node: {i + 1} -> executing subroutine SKI") 
             NODE[1].SKI()
-
-            '''print("Connecting matrix")
-            print(tabulate(NODE[1].S, tablefmt="fancy_grid"))
-            check = True
-            for a in range(NODE[1].NK):
-                count  =0
-                for b in range(NODE[1].NCHANL):
-                    if NODE[1].S[a][b] != 0:
-                        count+=1
-                if count != 2:
-                    check = False
-            for a in range(NODE[1].NCHANL):
-                count  =0
-                for b in range(NODE[1].NK):
-                    if NODE[1].S[a][b] != 0:
-                        count+=1
-                if count != 2:
-                    check = False
-            print("Test currently not working correctly please ignore below 2 messages")
-            print("Check for connecting matrix: To see if each and and each column has exactly 2 non-zero values")
-            if check == True:
-                print("YES")
-            else:
-                print("NO")
-            
-            Product = matrix_multiply(NODE[1].ST,NODE[1].S)
-            print(tabulate(Product, tablefmt="fancy_grid"))
-            if check_zero_sums(Product):
-                print("YES")
-            else:
-                print("NO")'''
-
+            progressLabel.configure(text=f"Node: {i + 1} -> executing subroutine XD") 
             NODE[1].XD()
+            progressLabel.configure(text=f"Node: {i + 1} -> executing subroutine XB") 
             NODE[1].XB()
+            progressLabel.configure(text=f"Node: {i + 1} -> executing subroutine GAUSS") 
             NODE[1].gauss()
+            progressLabel.configure(text=f"Node: {i + 1} -> executing subroutine DCROSS") 
             NODE[1].DCROSS()
 
-            #Reversing the flow
+            # Reversing the flow
             for K in range(NODE[1].NK):
                 NODE[1].WIJ1[K] = - NODE[1].WIJ1[K]
             
             NODE[1].MASFLO()
-            #copying the F1 in F11
+            
+            # copying the F1 in F11
             for I in range(NODE[1].NCHANL):
                 NODE[1].F11[I] = NODE[1].F1[I]
             
@@ -168,27 +114,39 @@ def subchannel_analysis(values, root):
             P1, WIJ1, F1, -- calculated from above functions respectively
             now introducing checks if P1, F1, is positive or not
             '''
-            #Check for P1
+            progressLabel.configure(text=f"Node: {i + 1} -> doing checks...") 
+            # Check for P1
             for I in range(NODE[1].NCHANL):
                 if(NODE[1].P1[I] < 0 ):
-                    print(f"Negative pressure in P1 at node {i}")
-                    print(tabulate([[NODE[1].P1[I], NODE[1].F1[I]] for I in range(14)], headers=['P1', 'F1'], tablefmt = 'grid'))
-                    print(tabulate([[NODE[1].WIJ1[I]] for I in range(19)], headers=['WIJ1'], tablefmt = 'grid'))
-                    sys.exit()
-            #Check for F1
+                    progressLabel.configure(text=f"Negative pressure in P1 at node {i+1}, check error.txt!")
+                    a = tabulate([[NODE[1].P1[I], NODE[1].F1[I]] for I in range(14)], headers=['P1', 'F1'], tablefmt = 'grid')
+                    b = tabulate([[NODE[1].WIJ1[I]] for I in range(19)], headers=['WIJ1'], tablefmt = 'grid')
+                    with open(DIREC+r"\error_log.txt", "w") as f:
+                        f.write(f"Negative pressure in P1 at node {i+1}\n\n")
+                        f.write(a)
+                        f.write("/n/n")
+                        f.write(b)
+                    return
+            # Check for F1
             for I in range(NODE[1].NCHANL):
                 if(NODE[1].F1[I] < 0 ):
-                    print(f"Negative massflow rate in F1 at node {i}")
-                    print(tabulate([[NODE[1].P1[I], NODE[1].F1[I]] for I in range(14)], headers=['P1', 'F1'], tablefmt = 'grid'))
-                    print(tabulate([[NODE[1].WIJ1[I]] for I in range(19)], headers=['WIJ1'], tablefmt = 'grid'))
-                    sys.exit()
-            #print("All checks passes for P1 and F1 and WIj1, values are listed below")
+                    progressLabel.configure(text=f"Negative massflow rate in F1 at node {i+1}, check error.txt!")
+                    a = (tabulate([[NODE[1].P1[I], NODE[1].F1[I]] for I in range(14)], headers=['P1', 'F1'], tablefmt = 'grid'))
+                    b = (tabulate([[NODE[1].WIJ1[I]] for I in range(19)], headers=['WIJ1'], tablefmt = 'grid'))
+                    with open(DIREC+r"\error_log.txt", "w") as f:
+                        f.write(f"Negative massflow rate in F1 at node {i+1}\n\n")
+                        f.write(a)
+                        f.write("\n\n")
+                        f.write(b)
+                    return
+            progressLabel.configure(text=f"Node: {i + 1} -> all checks passed!") 
             
             for I in range(NODE[1].NCHANL):
                 NODE[1].ERROR[I] = abs((NODE[1].F11[I] - NODE[1].F1[I]) / NODE[1].F1[I])
             
             EMAX = max(NODE[1].ERROR)
 
+            progressLabel.configure(text=f"Node: {i + 1} -> checking for errors") 
             while EMAX > 10E-8:
                 NODE[1].AXIMOM()
                 for I in range(NODE[1].NCHANL):
@@ -206,9 +164,11 @@ def subchannel_analysis(values, root):
                 
                 EMAX = max(NODE[1].ERROR)
 
+            progressLabel.configure(text=f"Node: {i + 1} -> executing subroutine HM") 
             NODE[1].HM()
 
-            if i%1 == 0:
+            # DEBUG
+            if 0:#i%1 == 0:
                 print(f"FOR NODE {i}:\n")
                 print(f"Pressure {i}: {NODE[1].P1}\n")
                 print(f"Enthalpy {i}: {NODE[1].H1}\n")
@@ -226,34 +186,38 @@ def subchannel_analysis(values, root):
                 Crossflow[chan].append(NODE[1].WIJ1[chan])
 
             # DATA STORING
-            direc2 = os.path.dirname(os.path.abspath(__file__)) + rf"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes\Subchannel Data"
+            progressLabel.configure(text=f"Node: {i + 1} -> Computing...") 
+            direc2 = DIREC + rf"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes\Subchannel Data"
             if not os.path.exists(direc2):
                 os.makedirs(direc2)
             if i == 0:
                 for channel in range(NODE[1].NCHANL):
                     with open(direc2+rf"\Channel {channel + 1}.csv", 'w', newline='') as file:
                         writer = csv.writer(file)
-                        writer.writerow(["Node Number", "Pressure", "Enthalpy", "CrossFlow", "MassFlow"])
-                        writer.writerow([0, NODE[1].P1[channel], NODE[1].H1[channel], NODE[1].WIJ1[channel], NODE[1].F1[channel]])
+                        writer.writerow(["Node", "Pressure", "Enthalpy", "Mass Flow Rate", "CrossFlow"])
+                        writer.writerow([i+1, NODE[1].P1[channel], NODE[1].H1[channel], NODE[1].F1[channel], NODE[1].WIJ1[channel]])
 
             else:
                 for channel in range(NODE[1].NCHANL):
                     with open(direc2+rf"\Channel {channel + 1}.csv", 'a', newline='') as file:
                         writer = csv.writer(file)
-                        writer.writerow([i, NODE[1].P1[channel], NODE[1].H1[channel], NODE[1].WIJ1[channel], NODE[1].F1[channel]])
+                        writer.writerow([i+1, NODE[1].P1[channel], NODE[1].H1[channel], NODE[1].F1[channel], NODE[1].WIJ1[channel]])
 
 
             ################################## THIS IS WHERE THE COPYING HAPPENS
             NODE[0] = copy.deepcopy(NODE[1])
 
-            progressLabel.configure(text=f"Computing Node: {i + 1}")
+            if i == NODE[0].NNODE - 1:
+                progressLabel.configure(text=f"Computation finished! Please wait...")
             root.after(1, update_progress, progressbar, i + 1)  # Schedule next update after 1ms
 
         else:
-            tabulation()
+            #tabulation()
+            processing.destroy()
+            plotting(rf"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes", Axial_length)
+            return
 
     update_progress(progressBar, 0)
-
 
     def tabulation():
         # DATA TABULATION
@@ -271,7 +235,7 @@ def subchannel_analysis(values, root):
         LAST_ROW = ["", sum(F0), "", sum(F1), sum(H1), sum(C1), sum(H0_C1)]
 
         datas = zip(SCs, F0, H0, F1, H1, C1, H0_C1)
-        direc = os.path.dirname(os.path.abspath(__file__)) + rf"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes"
+        direc = DIREC + rf"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes"
         if not os.path.exists(direc):
             os.makedirs(direc)
         with open(direc+r"\final_results.csv", "w", newline='') as datasheet:
@@ -296,6 +260,8 @@ def subchannel_analysis(values, root):
         df = pd.DataFrame(data_dict)
         df.to_excel(direc+r"\nodes_results.xlsx", index=False)
 
+        #return
+    
         # PLOT CREATION
         for i in range(NODE[0].NCHANL):
             # Create a new figure for each subplot
@@ -336,4 +302,5 @@ def subchannel_analysis(values, root):
             plt.legend()
             plt.tight_layout()
 
+        processing.destroy()
         plt.show()

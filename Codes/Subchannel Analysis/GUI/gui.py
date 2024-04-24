@@ -1,22 +1,29 @@
+from tkinter import messagebox
 from analysis import subchannel_analysis
-import os
+import os, warnings
 import customtkinter as ctk
 import tkinter as tk
 from CTkTable import CTkTable
 from PIL import Image
 import pandas as pd
-import warnings
+
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 def main():
-    # Define the directory
-    direc = os.path.dirname(os.path.abspath(__file__))
+    # Define the DIRECtory
+    DIREC = os.path.dirname(os.path.abspath(__file__))
     filepath = ['']
 
+    def on_close():
+        if messagebox.askyesno("Confirmation", "Are you sure you want to close the application?", parent=root):
+            root.quit()
+            root.destroy()
 
     # Creating the main tkinter window
     root = tk.Tk()
+    root.iconbitmap(DIREC + r"\images\favicon.ico")
     root.title("Single Phase Subchannel Analysis")
+    root.protocol("WM_DELETE_WINDOW", on_close)
     root.geometry("+0+0")
     root.resizable(0, 0)
     
@@ -117,9 +124,10 @@ def main():
             valid = data_checker()
             if valid != 0:
                 status.configure(text=f"  Status: Processing... Please Wait...")
-                for i in valid:
-                    print(i)
+                
+                # Analysis function call (MAIN CALL)
                 subchannel_analysis(valid, root)
+
             else:
                 pass    
 
@@ -133,7 +141,7 @@ def main():
             else:
                 template_data[i] = [" "] * lenizer
         template_df = pd.DataFrame(template_data)
-        template_path = os.path.join(direc, 'template.xlsx')
+        template_path = os.path.join(DIREC, 'template.xlsx')
         template_df.to_excel(template_path, index=False)
         status.configure(text=f"  Status: Template saved as 'template.xlsx'.")
 
@@ -145,7 +153,7 @@ def main():
     bottom_frame.grid(row=1, column=0)
 
     # HEADING label
-    heading_image = Image.open(direc + "/Images/college.png")
+    heading_image = Image.open(DIREC + "/Images/college.png")
     tup_siz = ((109/90)*height_size*2-padding*2, height_size*2-padding*2)
     heading_image = ctk.CTkImage(heading_image, size=tup_siz)
     heading_image = ctk.CTkLabel(top_frame, width=(1/10)*width_size - 2*padding, height=height_size*2, image=heading_image, text="", bg_color=dark_col, fg_color=dark_col)
@@ -156,17 +164,17 @@ def main():
 
     button_font_size = height_size/2
     # BUTTONS
-    upload_image = Image.open(direc + "/Images/upload.png")
+    upload_image = Image.open(DIREC + "/Images/upload.png")
     upload_image = ctk.CTkImage(upload_image, size=(button_font_size,button_font_size))
     upload_button = ctk.CTkButton(bottom_frame, width=width_size/3 - 2*padding, height=height_size, image=upload_image, text="Upload Excel File", command=upload_excel, font=(font_type, button_font_size, "bold"), hover_color=button_hover, bg_color=light_col, fg_color=button_fg, anchor="w")
     upload_button.grid(row=0, column=0, padx=padding, pady=padding)
 
-    process_image = Image.open(direc + "/Images/process.png")
+    process_image = Image.open(DIREC + "/Images/process.png")
     process_image = ctk.CTkImage(process_image, size=(button_font_size,button_font_size))
     process_button = ctk.CTkButton(bottom_frame, width=width_size/3 - 2*padding, height=height_size, image=process_image, text="Process Data", command=process_data, font=(font_type, button_font_size, "bold"), hover_color=button_hover, bg_color=light_col, fg_color=button_fg, anchor="w")
     process_button.grid(row=0, column=1, padx=padding, pady=padding)
 
-    download_image = Image.open(direc + "/Images/download.png")
+    download_image = Image.open(DIREC + "/Images/download.png")
     download_image = ctk.CTkImage(download_image, size=(button_font_size,button_font_size))
     download_button = ctk.CTkButton(bottom_frame, width=width_size/3 - 2*padding, height=height_size, image=download_image, text="Download Template Excel", command=download_template, font=(font_type, button_font_size, "bold"), hover_color=button_hover, bg_color=light_col, fg_color=button_fg, anchor="w")
     download_button.grid(row=0, column=2, padx=padding, pady=padding)
@@ -220,4 +228,7 @@ def main():
     root.mainloop()
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except:
+        pass
