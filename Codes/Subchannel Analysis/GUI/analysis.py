@@ -10,7 +10,7 @@ from time import sleep
 
 DIREC = os.path.dirname(os.path.abspath(__file__))
 
-def subchannel_analysis(values, root):
+def subchannel_analysis(values, root, status):
 
     # DATA
     scaling = 0.8
@@ -214,6 +214,7 @@ def subchannel_analysis(values, root):
         else:
             #tabulation()
             processing.destroy()
+            status.configure(text=f"  Status: Computation Finished!")
             plotting(rf"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes", Axial_length)
             return
 
@@ -262,7 +263,7 @@ def subchannel_analysis(values, root):
 
         #return
     
-        # PLOT CREATION
+        # PLOT CREATION EXTRA
         for i in range(NODE[0].NCHANL):
             # Create a new figure for each subplot
             plt.figure()
