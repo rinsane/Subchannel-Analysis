@@ -45,9 +45,9 @@ def main():
 
     # Function to upload Excel file
     def upload_excel():
-        #filepath[0] = tk.filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx;*.xls")])
+        filepath[0] = tk.filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx;*.xls")])
         ########## DEBUG
-        filepath[0] = r"E:\COde work\Things\Subchannel-Analysis\Codes\Subchannel Analysis\GUI\gooddata.xlsx"
+        #filepath[0] = r"E:\COde work\Things\Subchannel-Analysis\Codes\Subchannel Analysis\GUI\gooddata.xlsx"
         
         if filepath[0]:
             status.configure(text=f"  Status: Uploaded File -> {os.path.basename(filepath[0])}")

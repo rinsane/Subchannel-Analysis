@@ -3,10 +3,8 @@ from plotting_gui import plotting
 import csv, os, copy
 import customtkinter as ctk
 import tkinter as tk
-import matplotlib.pyplot as plt
 from tabulate import tabulate
 import pandas as pd
-from time import sleep
 import shutil
 
 DIREC = os.path.dirname(os.path.abspath(__file__))
@@ -20,8 +18,6 @@ def subchannel_analysis(values, root, status):
     screen_height = int(h*scaling)
     
     light_col = "#2c2c2c"
-    dark_col = "#202020"
-    button_fg = "#005c4b"
     button_hover = "#1daa61"
     font_type = "Inter"
     width_size = screen_width
