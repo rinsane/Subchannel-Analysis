@@ -6,8 +6,17 @@ from CTkTable import CTkTable
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+import sys
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS2
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 def plotting(LOCATION, Axial_length, Crossflow):
     # Define the DIRECtory
@@ -20,7 +29,7 @@ def plotting(LOCATION, Axial_length, Crossflow):
             
     # Creating the main tkinter window
     win = tk.Tk()
-    win.iconbitmap(DIREC + r"\images\favicon.ico")
+    win.iconbitmap(resource_path(DIREC + r"\images\favicon.ico"))
     win.title(LOCATION[1:])
     win.protocol("WM_DELETE_WINDOW", on_close)
     win.geometry("+0+0")
@@ -217,7 +226,7 @@ def plotting(LOCATION, Axial_length, Crossflow):
     head_label = ctk.CTkLabel(frame0, width=width_size - 4*padding, height=height_size*2, text="".join(LOCATION[1:].replace('_', ' ')), font=(font_type, height_size, "bold"), bg_color=dark_col, fg_color=dark_col, anchor="w")
     head_label.grid(row=0, column=0, padx=2*padding, pady=2*padding)
 
-    NCHANL = int(LOCATION[1:].replace('_', ' ').split()[1])
+    NCHANL = int(LOCATION[1:].replace('_', ' ').split()[2])
 
     radioButtons = []
 
@@ -263,7 +272,7 @@ def plotting(LOCATION, Axial_length, Crossflow):
     table_frame = ctk.CTkScrollableFrame(frame2, width=(3/8)*width_size-padding, height=10*height_size, fg_color=light_col3, bg_color=light_col3, corner_radius=0)
     table_frame.grid(row=1, column=0, columnspan=3)
 
-    table_data = [["Node", connectionSelect.get()]] + [[f"  {i + 1}", f"   {data_dict[connectionSelect.get()][i]}"] for i in range(len(Axial_length))] + [""]
+    table_data = [["Node", connectionSelect.get()]] + [[f"  {i + 1}", f"   {data_dict[connectionSelect.get()][i]}"] for i in range(0, len(Axial_length), len(Axial_length)//10)] + [""]
     table = CTkTable(table_frame, values=table_data, width=(5/7)*(3/8)*width_size-1.1*padding, height=0.6*height_size, font=("Arial Bold", table_body_font), justify="left", anchor="w", colors=["#454545", "#515151"], header_color=dark_col, hover_color=light_col3)
     table.grid(row=0, column=0, padx=padding, pady=padding)
     table.edit_column(0, width=(2/7)*(3/8)*width_size-1.1*padding, anchor="w")
@@ -277,6 +286,6 @@ def plotting(LOCATION, Axial_length, Crossflow):
     stepLabel.grid(row=2, column=0, padx=padding, pady=padding, sticky='w')
     stepValue = ctk.CTkEntry(frame2, width=(2/7)*(3/8)*width_size-0.7*padding, height=height_size-2*padding, font=(font_type, button_font_size))
     stepValue.grid(row=2, column=1, padx=padding, pady=padding, sticky='w')
-    stepValue.insert(0, "1")
+    stepValue.insert(0, str(len(Axial_length)//10))
    
     win.mainloop()

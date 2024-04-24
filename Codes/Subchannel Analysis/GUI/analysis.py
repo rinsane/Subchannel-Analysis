@@ -6,8 +6,17 @@ import tkinter as tk
 from tabulate import tabulate
 import pandas as pd
 import shutil
+import sys
 
 DIREC = os.path.dirname(os.path.abspath(__file__))
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS2
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 def subchannel_analysis(values, root, status):
 
@@ -26,7 +35,7 @@ def subchannel_analysis(values, root, status):
     # Function for Progress Bar
     nnode = values[0][9]
     processing = tk.Toplevel(root)
-    processing.iconbitmap(DIREC + r"\images\favicon.ico")
+    processing.iconbitmap(resource_path(DIREC + r"\images\favicon.ico"))
     processing.focus_set()
     processing.title("Computing...")
     processing.geometry(f"+{screen_width//3}+{screen_height//4}")
@@ -56,10 +65,10 @@ def subchannel_analysis(values, root, status):
     Pressure = [[] for _ in range(NODE[0].NCHANL)]      # P1
     Crossflow = [[] for _ in range(NODE[0].NK)]
     
-    direc2 = DIREC + fr"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes\Subchannel Data"
-    if os.path.exists(DIREC + fr"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes"):
+    direc2 = DIREC + fr"\Computation Results\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes\Subchannel Data"
+    if os.path.exists(DIREC + fr"\Computation Results\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes"):
         progressLabel.configure(text=f"Deleting old data for same config.")
-        shutil.rmtree(DIREC + fr"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes")
+        shutil.rmtree(DIREC + fr"\Computation Results\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes")
     if not os.path.exists(direc2):
         os.makedirs(direc2)
     
@@ -216,7 +225,7 @@ def subchannel_analysis(values, root, status):
             tabulation()
             processing.destroy()
             status.configure(text=f"  Status: Computation Finished!")
-            plotting(rf"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes", Axial_length, Crossflow)
+            plotting(rf"\Computation Results\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes", Axial_length, Crossflow)
             return
 
     update_progress(progressBar, 0)
@@ -237,7 +246,7 @@ def subchannel_analysis(values, root, status):
         LAST_ROW = ["", sum(F0), "", sum(F1), sum(H1), sum(C1), sum(H0_C1)]
 
         datas = zip(SCs, F0, H0, F1, H1, C1, H0_C1)
-        direc = DIREC + rf"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes"
+        direc = DIREC + rf"\Computation Results\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes"
         if not os.path.exists(direc):
             os.makedirs(direc)
         with open(direc+r"\final_results.csv", "w", newline='') as datasheet:
