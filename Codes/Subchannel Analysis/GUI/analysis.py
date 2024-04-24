@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from tabulate import tabulate
 import pandas as pd
 from time import sleep
+import shutil
 
 DIREC = os.path.dirname(os.path.abspath(__file__))
 
@@ -58,6 +59,13 @@ def subchannel_analysis(values, root, status):
     MassFlowRate = [[] for _ in range(NODE[0].NCHANL)]  # F1
     Pressure = [[] for _ in range(NODE[0].NCHANL)]      # P1
     Crossflow = [[] for _ in range(NODE[0].NK)]
+    
+    direc2 = DIREC + fr"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes\Subchannel Data"
+    if os.path.exists(DIREC + fr"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes"):
+        progressLabel.configure(text=f"Deleting old data for same config.")
+        shutil.rmtree(DIREC + fr"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes")
+    if not os.path.exists(direc2):
+        os.makedirs(direc2)
     
     def update_progress(progressbar, i):
         if i < NODE[0].NNODE:
@@ -187,21 +195,18 @@ def subchannel_analysis(values, root, status):
 
             # DATA STORING
             progressLabel.configure(text=f"Node: {i + 1} -> Computing...") 
-            direc2 = DIREC + rf"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes\Subchannel Data"
-            if not os.path.exists(direc2):
-                os.makedirs(direc2)
             if i == 0:
                 for channel in range(NODE[1].NCHANL):
-                    with open(direc2+rf"\Channel {channel + 1}.csv", 'w', newline='') as file:
+                    with open(direc2+fr"\Channel {channel + 1}.csv", 'w', newline='') as file:
                         writer = csv.writer(file)
                         writer.writerow(["Node", "Pressure", "Enthalpy", "Mass Flow Rate", "CrossFlow"])
-                        writer.writerow([i+1, NODE[1].P1[channel], NODE[1].H1[channel], NODE[1].F1[channel], NODE[1].WIJ1[channel]])
+                        writer.writerow([int(i+1), NODE[1].P1[channel], NODE[1].H1[channel], NODE[1].F1[channel], NODE[1].WIJ1[channel]])
 
             else:
                 for channel in range(NODE[1].NCHANL):
-                    with open(direc2+rf"\Channel {channel + 1}.csv", 'a', newline='') as file:
+                    with open(direc2+fr"\Channel {channel + 1}.csv", 'a', newline='') as file:
                         writer = csv.writer(file)
-                        writer.writerow([i+1, NODE[1].P1[channel], NODE[1].H1[channel], NODE[1].F1[channel], NODE[1].WIJ1[channel]])
+                        writer.writerow([int(i+1), NODE[1].P1[channel], NODE[1].H1[channel], NODE[1].F1[channel], NODE[1].WIJ1[channel]])
 
 
             ################################## THIS IS WHERE THE COPYING HAPPENS
@@ -212,10 +217,10 @@ def subchannel_analysis(values, root, status):
             root.after(1, update_progress, progressbar, i + 1)  # Schedule next update after 1ms
 
         else:
-            #tabulation()
+            tabulation()
             processing.destroy()
             status.configure(text=f"  Status: Computation Finished!")
-            plotting(rf"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes", Axial_length)
+            plotting(rf"\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes", Axial_length, Crossflow)
             return
 
     update_progress(progressBar, 0)
@@ -249,59 +254,4 @@ def subchannel_analysis(values, root, status):
         df.to_excel(direc+r"\final_results.xlsx", index=False)
         os.remove(direc+r"\final_results.csv")
 
-        # Saving data for each node
-        data_dict = {
-            "Node": list(range(NODE[0].NNODE)),
-            "Pressure (P1)": [NODE[1].P1 for _ in range(NODE[0].NNODE)],
-            "Enthalpy (H1)": [NODE[1].H1 for _ in range(NODE[0].NNODE)],
-            "Mass Flow Rate (F1)": [NODE[1].F1 for _ in range(NODE[0].NNODE)],
-            "Crossflow Rate (WIJ1)": [NODE[1].WIJ1 for _ in range(NODE[0].NNODE)]
-        }
-
-        df = pd.DataFrame(data_dict)
-        df.to_excel(direc+r"\nodes_results.xlsx", index=False)
-
-        #return
-    
-        # PLOT CREATION EXTRA
-        for i in range(NODE[0].NCHANL):
-            # Create a new figure for each subplot
-            plt.figure()
-            
-            # Plot Pressure
-            plt.subplot(1, 3, 1)
-            plt.plot(Axial_length, Pressure[i], label="Pressure")
-            plt.title(f"SUB-CHANNEL {i}")
-            plt.xlabel("Axial Length")
-            plt.ylabel("Pressure")
-            plt.legend()
-
-            # Plot Enthalpy
-            plt.subplot(1, 3, 2)
-            plt.plot(Axial_length, Enthalpy[i], label="Enthalpy")
-            plt.title(f"SUB-CHANNEL {i}")
-            plt.xlabel("Axial Length")
-            plt.ylabel("Enthalpy")
-            plt.legend()
-
-            # Plot MassFlowRate
-            plt.subplot(1, 3, 3)
-            plt.plot(Axial_length, MassFlowRate[i], label="Mass Flow Rate")
-            plt.title(f"SUB-CHANNEL {i}")
-            plt.xlabel("Axial Length")
-            plt.ylabel("Mass Flow Rate")
-            plt.legend()
-
-            plt.tight_layout()
-
-        plt.figure()
-        for i in range(NODE[0].NK):
-            plt.plot(Axial_length, Crossflow[i], label=f"{i}")
-            plt.title(f"Crossflow")
-            plt.xlabel("Axial Length")
-            plt.ylabel("Crossflow Rate")
-            plt.legend()
-            plt.tight_layout()
-
-        processing.destroy()
-        plt.show()
+        return
