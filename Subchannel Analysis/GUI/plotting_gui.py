@@ -29,7 +29,7 @@ def plotting(LOCATION, Axial_length, Crossflow):
             
     # Creating the main tkinter window
     win = tk.Tk()
-    win.iconbitmap(resource_path(DIREC + r"\images\favicon.ico"))
+    # win.iconbitmap(resource_path(DIREC + r"/images/favicon.ico"))
     win.title(LOCATION[1:])
     win.protocol("WM_DELETE_WINDOW", on_close)
     win.geometry("+0+0")

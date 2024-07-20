@@ -35,7 +35,7 @@ def subchannel_analysis(values, root, status):
     # Function for Progress Bar
     nnode = values[0][9]
     processing = tk.Toplevel(root)
-    processing.iconbitmap(resource_path(DIREC + r"\images\favicon.ico"))
+    # processing.iconbitmap(resource_path(DIREC + r"/images/favicon.ico"))
     processing.focus_set()
     processing.title("Computing...")
     processing.geometry(f"+{screen_width//3}+{screen_height//4}")
