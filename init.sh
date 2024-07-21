@@ -3,7 +3,7 @@
 VENV_DIR="venv"
 
 # Specify the libraries to install
-REQUIRED_LIBS="numpy pandas Tk CTkTable customtkinter pillow matplotlib tabulate openpyxlu"
+REQUIRED_LIBS="numpy pandas Tk CTkTable customtkinter pillow matplotlib tabulate"
 
 # Check if the virtual environment directory already exists
 if [ ! -d "$VENV_DIR" ]; then

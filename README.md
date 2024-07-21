@@ -9,35 +9,33 @@ A GUI application for the Subchannel Analysis of annular fuel assembly using the
 - [License](#license)
 
 ## Description
-We have developed a GUI using the CustomTkinter Python library in order to facilitate ease in nuclear fuel rod subchannel analysis.
-1. **Steady and Transient State for Nuclear Rod:**
-    We developed codes, under the guidance of our senior professor Prof. Kannan Iyer, for analysing the temperature profile of Nuclear Fuel rods for both Stedy and Trasnsient conditions. We used libraries like Pandas, NumPy, Matplotlib, etc. for efficiency in computation, storage and visualisation of results.
+We have developed a GUI using the CustomTkinter Python library to facilitate ease in nuclear fuel rod subchannel analysis.
 
-2. **Subchannel Analysis:**
-    We then proceeded to make a state-of-the-art Graphical User Interface for the Subchannel Analysis of annular fuel assembly using CustomTkinter. We created a user friendly frontend that was seamless integrated with computation algorithm, which was also written in Python.
+**Steady and Transient State for Nuclear Rods:** Under the guidance of our senior professor, Prof. Kannan Iyer, we developed codes to analyze the temperature profile of nuclear fuel rods in both steady and transient conditions. We utilized libraries such as Pandas, NumPy, and Matplotlib to enhance the efficiency of computation, storage, and visualization of results.
+
+**Subchannel Analysis:** Subsequently, we created a state-of-the-art Graphical User Interface (GUI) for the subchannel analysis of an annular fuel assembly using CustomTkinter. We designed a user-friendly frontend that seamlessly integrates with the computation algorithm, which was also developed in Python.
 
 ## Installation
-To use the Application, run the `.sh` script on your machine to create a Python Virtual Environment with all the required libraries.
-
 1. **Clone the repository:**
     ```sh
-    git clone https://github.com/yaegeristhitesh/RLox
+    git clone https://github.com/rinsane/Subchannel-Analysis.git
     ```
-2. **Navigate to the project directory:**
+2.    **Setup the Python virtual environment:** To use the Application, run the `init.sh` script on your machine to create a Python Virtual Environment with all the required libraries.
+
+4. **Activate the virtual environment:**
     ```sh
-    cd rlox-basic/
-    ```
-3. **Build the project:**
-    ```sh
-    cargo build --release
+    source venv/bin/activate
     ```
 
 ## Usage
-After building the project, you can run the interpreter with the following command:
-
+To use the GUI:
 ```sh
-./target/release/rlox_basic yourscript.lox
+cd "Subchannel Analysis/GUI"
+Python3 MAIN.py
 ```
+Refer the `USAGE.pdf`.
+
+(For Advanced users: To use the rod analysis (CLI driven), provide it with the data in the inputs file)
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
