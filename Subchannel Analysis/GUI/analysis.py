@@ -35,7 +35,7 @@ def subchannel_analysis(values, root, status):
     # Function for Progress Bar
     nnode = values[0][9]
     processing = tk.Toplevel(root)
-    # processing.iconbitmap(resource_path(DIREC + r"/images/favicon.ico"))
+    # processing.iconbitmap(resource_path(DIREC + "/images/favicon.ico"))
     processing.focus_set()
     processing.title("Computing...")
     processing.geometry(f"+{screen_width//3}+{screen_height//4}")
@@ -65,10 +65,10 @@ def subchannel_analysis(values, root, status):
     Pressure = [[] for _ in range(NODE[0].NCHANL)]      # P1
     Crossflow = [[] for _ in range(NODE[0].NK)]
     
-    direc2 = DIREC + fr"\Computation Results\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes\Subchannel Data"
-    if os.path.exists(DIREC + fr"\Computation Results\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes"):
+    direc2 = DIREC + f"/Computation Results/RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes/Subchannel Data"
+    if os.path.exists(DIREC + f"/Computation Results/RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes"):
         progressLabel.configure(text=f"Deleting old data for same config.")
-        shutil.rmtree(DIREC + fr"\Computation Results\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes")
+        shutil.rmtree(DIREC + f"/Computation Results/RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes")
     if not os.path.exists(direc2):
         os.makedirs(direc2)
     
@@ -134,7 +134,7 @@ def subchannel_analysis(values, root, status):
                     progressLabel.configure(text=f"Negative pressure in P1 at node {i+1}, check error.txt!")
                     a = tabulate([[NODE[1].P1[I], NODE[1].F1[I]] for I in range(14)], headers=['P1', 'F1'], tablefmt = 'grid')
                     b = tabulate([[NODE[1].WIJ1[I]] for I in range(19)], headers=['WIJ1'], tablefmt = 'grid')
-                    with open(DIREC+r"\error_log.txt", "w") as f:
+                    with open(DIREC+"/error_log.txt", "w") as f:
                         f.write(f"Negative pressure in P1 at node {i+1}\n\n")
                         f.write(a)
                         f.write("/n/n")
@@ -146,7 +146,7 @@ def subchannel_analysis(values, root, status):
                     progressLabel.configure(text=f"Negative massflow rate in F1 at node {i+1}, check error.txt!")
                     a = (tabulate([[NODE[1].P1[I], NODE[1].F1[I]] for I in range(14)], headers=['P1', 'F1'], tablefmt = 'grid'))
                     b = (tabulate([[NODE[1].WIJ1[I]] for I in range(19)], headers=['WIJ1'], tablefmt = 'grid'))
-                    with open(DIREC+r"\error_log.txt", "w") as f:
+                    with open(DIREC+"/error_log.txt", "w") as f:
                         f.write(f"Negative massflow rate in F1 at node {i+1}\n\n")
                         f.write(a)
                         f.write("\n\n")
@@ -202,14 +202,14 @@ def subchannel_analysis(values, root, status):
             progressLabel.configure(text=f"Node: {i + 1} -> Computing...") 
             if i == 0:
                 for channel in range(NODE[1].NCHANL):
-                    with open(direc2+fr"\Channel {channel + 1}.csv", 'w', newline='') as file:
+                    with open(direc2+f"/Channel {channel + 1}.csv", 'w', newline='') as file:
                         writer = csv.writer(file)
                         writer.writerow(["Node", "Pressure", "Enthalpy", "Mass Flow Rate", "CrossFlow"])
                         writer.writerow([int(i+1), NODE[1].P1[channel], NODE[1].H1[channel], NODE[1].F1[channel], NODE[1].WIJ1[channel]])
 
             else:
                 for channel in range(NODE[1].NCHANL):
-                    with open(direc2+fr"\Channel {channel + 1}.csv", 'a', newline='') as file:
+                    with open(direc2+f"/Channel {channel + 1}.csv", 'a', newline='') as file:
                         writer = csv.writer(file)
                         writer.writerow([int(i+1), NODE[1].P1[channel], NODE[1].H1[channel], NODE[1].F1[channel], NODE[1].WIJ1[channel]])
 
@@ -225,7 +225,7 @@ def subchannel_analysis(values, root, status):
             tabulation()
             processing.destroy()
             status.configure(text=f"  Status: Computation Finished!")
-            plotting(rf"\Computation Results\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes", Axial_length, Crossflow)
+            plotting(f"/Computation Results/RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes", Axial_length, Crossflow)
             return
 
     update_progress(progressBar, 0)
@@ -246,17 +246,17 @@ def subchannel_analysis(values, root, status):
         LAST_ROW = ["", sum(F0), "", sum(F1), sum(H1), sum(C1), sum(H0_C1)]
 
         datas = zip(SCs, F0, H0, F1, H1, C1, H0_C1)
-        direc = DIREC + rf"\Computation Results\RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes"
+        direc = DIREC + f"/Computation Results/RESULTS_{NODE[0].NCHANL}_Channels_{NODE[0].NNODE}_Nodes"
         if not os.path.exists(direc):
             os.makedirs(direc)
-        with open(direc+r"\final_results.csv", "w", newline='') as datasheet:
+        with open(direc+"/final_results.csv", "w", newline='') as datasheet:
             writer = csv.writer(datasheet)
             writer.writerow(Headings)
             writer.writerows(datas)
             writer.writerow(LAST_ROW)
         
-        df = pd.read_csv(direc+r"\final_results.csv")
-        df.to_excel(direc+r"\final_results.xlsx", index=False)
-        os.remove(direc+r"\final_results.csv")
+        df = pd.read_csv(direc+"/final_results.csv")
+        df.to_excel(direc+"/final_results.xlsx", index=False)
+        os.remove(direc+"/final_results.csv")
 
         return

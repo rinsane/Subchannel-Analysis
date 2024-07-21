@@ -29,7 +29,7 @@ def plotting(LOCATION, Axial_length, Crossflow):
             
     # Creating the main tkinter window
     win = tk.Tk()
-    # win.iconbitmap(resource_path(DIREC + r"/images/favicon.ico"))
+    # win.iconbitmap(resource_path(DIREC + "/images/favicon.ico"))
     win.title(LOCATION[1:])
     win.protocol("WM_DELETE_WINDOW", on_close)
     win.geometry("+0+0")
@@ -234,7 +234,7 @@ def plotting(LOCATION, Axial_length, Crossflow):
     resultsRadio = ctk.CTkRadioButton(frame1, fg_color=button_fg, hover_color=button_hover, radiobutton_width=height_size/1.6-2*padding, radiobutton_height=height_size/1.6-2*padding, width=(1/8)*width_size, height=height_size/1.4, font=(font_type, height_size/1.6-2*padding), text="Cross Flow Rate", value="Crossflow", variable=selectedChannel, command=drawTable)
     resultsRadio.grid(row=0, column=0, padx=padding*2)
     for i in range(NCHANL):
-        rb = ctk.CTkRadioButton(frame1, fg_color=button_fg, hover_color=button_hover, radiobutton_width=height_size/1.6-2*padding, radiobutton_height=height_size/1.6-2*padding, width=(1/8)*width_size, height=height_size/1.4, font=(font_type, height_size/1.6-2*padding), text=f" Subchannel {i+1}", value=fr"\Subchannel Data\Channel {i+1}.csv", variable=selectedChannel, command=drawTable)
+        rb = ctk.CTkRadioButton(frame1, fg_color=button_fg, hover_color=button_hover, radiobutton_width=height_size/1.6-2*padding, radiobutton_height=height_size/1.6-2*padding, width=(1/8)*width_size, height=height_size/1.4, font=(font_type, height_size/1.6-2*padding), text=f" Subchannel {i+1}", value=f"/Subchannel Data/Channel {i+1}.csv", variable=selectedChannel, command=drawTable)
         rb.grid(row=i+1, column=0, padx=padding*2)
         radioButtons.append(rb)
     
